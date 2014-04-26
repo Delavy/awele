@@ -1,0 +1,2 @@
+* Les attributs sont ils indépendants ? Utiliser le Test de Pearson
+-> chisq.test(awele.data[,13], awele.data[,14])$p.value : sa sert à rien
