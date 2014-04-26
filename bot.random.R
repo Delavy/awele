@@ -1,0 +1,1 @@
+random = function (awele) runif (6, 0, 1)
