@@ -12,7 +12,10 @@ cout = function(arg1, arg2='', arg3='',arg4=''){
 }
 
 # Chargement des données
+# !! Attention, on doit etre placé dans le bon repertoire pour charger le fichier awele.data
+# !! Pour changer : ctrl + maj + j
 awele.data = read.table ("awele.data", sep = ",", header = T)
+# !! 
 awele.val = awele.data[,1:12]
 awele.gagne = awele.data[,14]
 awele.coup = awele.data[,13]
@@ -31,6 +34,7 @@ for(i in 1:nrow(awele.data)){
   awele.sum[i,2] = sum(awele.data[i,7:12])
 }
 
+# ajout des coups et du score
 awele.sum[,3] = awele.data[,13]
 awele.sum[,4] = awele.data[,14]
 
