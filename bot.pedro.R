@@ -1,73 +1,156 @@
-# Chargement de la bibliothèque
+# Chargement de la biblioth?que
 library (e1071)
-# Chargement des données
+
+
+### Fonction Pedro
+
+## Fonction qui rajoute les donnÃ©es au tableau existant
+fx.completeData = function(data){
+  
+  cat("complete")
+  # crÃ©ation d'une nouvelle frame avec 6 colonnes en plus
+  decal = 6
+  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
+  
+  #ajout des colonnes de base
+  for(i in 1:12){
+    newData[,i] = data[,i];
+    colnames(newData)[i] = colnames(data)[i]
+  }
+  
+  
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    newData[i,13] = sum(data[i,1:6])
+    newData[i,14] = sum(data[i,7:12])
+  }
+  colnames(newData)[13] = "sumJ"
+  colnames(newData)[14] = "sumA"
+  
+  
+  #ajout des colonnes avec les nombres vides
+  for(i in 1:nrow(data)){
+    newData[i,15] = sum(data[i,1:6]==0)
+    newData[i,16] = sum(data[i,7:12]==0)
+  }
+  colnames(newData)[15] = "videsJ"
+  colnames(newData)[16] = "videsA"
+  
+  #ajout des colonnes avec le nombre Ã  1 ou 2
+  for(i in 1:nrow(data)){
+    newData[i,17] = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
+    newData[i,18] = sum(data[i,7:12]==2) + sum(data[i,7:12]==1)
+  }
+  colnames(newData)[17] = "1ou2J"
+  colnames(newData)[18] = "1ou2A"
+  
+  
+  #ajout des colonnes finales
+  for(i in 19:20){
+    newData[,i] = data[,i-decal];
+    colnames(newData)[i] = colnames(data)[i-decal]
+  }
+  
+  return (newData)
+}
+
+# Chargement des donn?es
 awele.data = read.table ("awele.data", sep = ",", header = T)
+awele.data = fx.completeData(awele.data)
+
+
 
 ####################
-# Première version #
+# Premi?re version #
 ####################
 
-# On sélectionne toutes les observations correspondant aux coups joués par le gagnant de la partie
-# On construit un modèle de Naive Bayes à partir des 12 premières variables de ces observations
-# On essaye de prédire la 13e variable (coup joué)
+# On s?lectionne toutes les observations correspondant aux coups jou?s par le gagnant de la partie
+# On construit un mod?le de Naive Bayes ? partir des 12 premi?res variables de ces observations
+# On essaye de pr?dire la 13e variable (coup jou?)
 
-# Fonction de construction du modèles
-nb.create.model = function (dataset)
+# Fonction de construction du mod?les
+pedro.create.model = function (dataset)
 {
-  # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
-  selection = awele.data [dataset [, 14] == "G", ]
-  # Et on construit un modèle de classification avec l'algorithme Naive bayes
-  model = naiveBayes (selection [, 1:12], selection [, 13])
+  # On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
+  selection = awele.data [dataset [, 20] == "G", ]
+  # Et on construit un mod?le de classification avec l'algorithme Naive bayes
+  model = naiveBayes (selection [, 1:18], selection [, 19])
   return (model)
 }
-# Construction du modèle
-nb.model = nb.create.model (awele.data)
-# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
-nb.exec = function (awele, model)
+# Construction du mod?le
+pedro.model = pedro.create.model (awele.data)
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
+pedro.exec = function (awele, model)
 {
-  # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
+  # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
   g = graines.matrix (awele)
+  
+  ####
+  ## on ajoute les colonnes sum, vides, 1ou2
+  #### 
+  # recopie de g
+  g2 = data.frame(matrix(data=0, nr = nrow(g), nc=ncol(g)+6))
+  
+  for(i in 1:12){
+    g2[,i] = g[,i]
+  }
+  
+  # sum
+  g2[13] = sum(g[1:6])
+  g2[14] = sum(g[7:12])
+  
+  # vides
+  g2[15] = sum(g[1:6]==0)
+  g2[16] = sum(g[7:12]==0)
+  
+  # 1ou2
+  g2[17] = sum(g[1:6]==1) + sum(g[1:6]==2)
+  g2[18] = sum(g[7:12]==1) + sum(g[7:12]==2)
+  
+  g = g2;
+  
+  
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
-  colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
-  # On applique le modèle et on retourne les prédictions (sous la forme de degrés d'appartenance aux classes)
+  colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "sumJ", "sumA", "videsJ", "videsA", "1ou2J","1ou2A")
+  # On applique le mod?le et on retourne les pr?dictions (sous la forme de degr?s d'appartenance aux classes)
   return (predict (model, g, type = "raw"))
 }
-# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
-nb = function (awele) return (nb.exec (awele, nb.model))
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+pedro = function (awele) return (pedro.exec (awele, pedro.model))
 
 ###################
 # Seconde version #
 ###################
 
 # On utilise toutes les observation
-# On construit un modèle de Naive Bayes à partir des 13 premières variables de ces observations
-# On essaye de prédire la 14e variable (coup gagnant ou perdant)
-# Pour une nouvelle observation, on ne dispose que des 12 première variables
-# On fait la prédiction pour chaque valeur possible à la 13e variable
+# On construit un mod?le de Naive Bayes ? partir des 13 premi?res variables de ces observations
+# On essaye de pr?dire la 14e variable (coup gagnant ou perdant)
+# Pour une nouvelle observation, on ne dispose que des 12 premi?re variables
+# On fait la pr?diction pour chaque valeur possible ? la 13e variable
 
-# Fonction de construction du modèles
-nb2.create.model = function (dataset)
+# Fonction de construction du mod?les
+pedro2.create.model = function (dataset)
 {
-  # on construit un modèle de classification avec l'algorithme Naive bayes
-  model = naiveBayes (dataset [, 1:13], dataset [, 14])
+  # on construit un mod?le de classification avec l'algorithme Naive bayes
+  model = naiveBayes (dataset [, 1:19], dataset [, 20])
   return (model)
 }
-# Construction du modèle
-nb2.model = nb2.create.model (awele.data)
-# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
-nb2.exec = function (awele, model)
+# Construction du mod?le
+pedro2.model = pedro2.create.model (awele.data)
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
+pedro2.exec = function (awele, model)
 {
-  # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
+  # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
   g = graines.matrix (awele)
-  # On répète six fois l'état du plateau de jeu (et on transforme en data.frame)
+  # On r?p?te six fois l'?tat du plateau de jeu (et on transforme en data.frame)
   g = as.data.frame (g [rep (1, 6), ])
   # On ajoute une 13e colonne qui contient les six valeurs possibles
-  g = cbind (g, factor (1:6, labels = levels (awele.data [, 13])))
+  g = cbind (g, factor (1:6, labels = levels (awele.data [, 19])))
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage  
-  colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "C")
-  # On applique le modèle
-  #et on retourne le degré d'appartenance à la classe "G" (probabilité d'après NB que le coup soit gagnant)
+  colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "sumJ", "sumA", "videsJ", "videsA", "1ou2J","1ou2A","C")
+  # On applique le mod?le
+  #et on retourne le degr? d'appartenance ? la classe "G" (probabilit? d'apr?s NB que le coup soit gagnant)
   return (predict (model, g, type = "raw") [, "G"])
 }
-# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
-nb2 = function (awele) return (nb2.exec (awele, nb2.model))
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+pedro2 = function (awele) return (pedro2.exec (awele, pedro2.model))

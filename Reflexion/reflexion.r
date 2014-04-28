@@ -2,7 +2,7 @@
 # Initialisation
 #--------------------------------------------------------
 
-# Chargement de la bibliothèque
+# Chargement de la biblioth?que
 library (e1071)
 library (fdm2id)
 
@@ -11,8 +11,8 @@ cout = function(arg1, arg2='', arg3='',arg4=''){
   cat(arg1,arg2,arg3,arg4,'\n')
 }
 
-# Chargement des données
-# !! Attention, on doit etre placé dans le bon repertoire pour charger le fichier awele.data
+# Chargement des donn?es
+# !! Attention, on doit etre plac? dans le bon repertoire pour charger le fichier awele.data
 # !! Pour changer : ctrl + maj + j
 awele.data = read.table ("awele.data", sep = ",", header = T)
 # !! 
@@ -25,7 +25,7 @@ awele.coup = awele.data[,13]
 #--  Ajout du nombre total de billes par joueur
 #--------------------------------------------------------
 
-# Création d'une nouvelle matrice qui contient les sommes
+# Cr?ation d'une nouvelle matrice qui contient les sommes
 awele.sum = data.frame(matrix(data=0, nr = nrow(awele.data), nc=4 ))
 
 # ajout des sommes
@@ -52,7 +52,7 @@ chisq.test(awele.sum[,2] , awele.coup)$p.value #0,33
 selection = awele.sum [awele.gagne== "G",]
 plot(selection[,1:2], col=selection[,3])
 
-# On compare la relation entre le nombre de cases vides avec le coup joué pour les 2 joueurs
+# On compare la relation entre le nombre de cases vides avec le coup jou? pour les 2 joueurs
 chisq.test(selection[,1] , selection[,3])$p.value #0,08
 chisq.test(selection[,2] , selection[,3])$p.value #0,07
 chisq.test((awele.sum[,1]-awele.sum[,2]) , awele.gagne)$p.value #0,001
@@ -61,10 +61,10 @@ chisq.test((awele.sum[,1]-awele.sum[,2]) , awele.gagne)$p.value #0,001
 #-- Ajout du nombre de cases vides par joueur
 #--------------------------------------------------------
 
-# Création d'une nouvelle matrice 
+# Cr?ation d'une nouvelle matrice 
 awele.vides = data.frame(matrix(data=0, nr = nrow(awele.data), nc=4))
 
-# ajout du nombre de case à 0
+# ajout du nombre de case ? 0
 for(i in 1:nrow(awele.data)){
   awele.vides[i,1] = sum(awele.data[i,1:6]==0)
   awele.vides[i,2] = sum(awele.data[i,7:12]==0)
@@ -88,18 +88,18 @@ chisq.test(awele.vides[,2] , awele.coup)$p.value #0,29
 selection = awele.vides [awele.gagne== "G", ]
 plot(selection[,1:2], col=selection[,3])
 
-# On compare la relation entre le nombre de cases vides avec le coup joué pour les 2 joueurs
+# On compare la relation entre le nombre de cases vides avec le coup jou? pour les 2 joueurs
 chisq.test(selection[,1] , selection[,3])$p.value #0,0022
 chisq.test(selection[,2] , selection[,3])$p.value #0,0010
 
 #--------------------------------------------------------
-#-- Ajout du nombre de cases à 1 ou 2 par joueur
+#-- Ajout du nombre de cases ? 1 ou 2 par joueur
 #--------------------------------------------------------
 
-# Création d'une nouvelle matrice 
+# Cr?ation d'une nouvelle matrice 
 awele.1ou2 = data.frame(matrix(data=0, nr = nrow(awele.data), nc=4 ))
 
-# ajout du nombre de case à 0
+# ajout du nombre de case ? 0
 for(i in 1:nrow(awele.data)){
   awele.1ou2[i,1] = sum(awele.data[i,1:6]==2) + sum(awele.data[i,1:6]==1)
   awele.1ou2[i,2] = sum(awele.data[i,7:12]==2) + sum(awele.data[i,7:12]==1)
@@ -115,7 +115,7 @@ colnames(awele.1ou2)[4] = "gagne"
 
 plot(awele.1ou2[,1:2], col=awele.gagne)
 
-# Y a t'il un rapport entre le nombres de cases à 1 et à 2 et le coup joué ?
+# Y a t'il un rapport entre le nombres de cases ? 1 et ? 2 et le coup jou? ?
 chisq.test(awele.1ou2[,1] , awele.coup)$p.value #0,66
 chisq.test(awele.1ou2[,2] , awele.coup)$p.value #0,25
 
@@ -123,23 +123,73 @@ chisq.test(awele.1ou2[,2] , awele.coup)$p.value #0,25
 selection = awele.1ou2 [awele.gagne== "G", ]
 plot(selection[,1:2], col=selection[,3])
 
-# On compare la relation entre le nombre de cases à 1ou2 avec le coup joué pour les 2 joueurs
+# On compare la relation entre le nombre de cases ? 1ou2 avec le coup jou? pour les 2 joueurs
 chisq.test(selection[,1] , selection[,3])$p.value #0,092
 chisq.test(selection[,2] , selection[,3])$p.value #0,24
 
 
+## Fonction qui rajoute les donnÃ©es au tableau existant
+fx.completeData = function(data){
+  # crÃ©ation d'une nouvelle frame avec 6 colonnes en plus
+  decal = 6
+  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
+  
+  #ajout des colonnes de base
+  for(i in 1:12){
+    newData[,i] = data[,i];
+    colnames(newData)[i] = colnames(data)[i]
+  }
+    
+  
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    newData[i,13] = sum(data[i,1:6])
+    newData[i,14] = sum(data[i,7:12])
+  }
+  colnames(newData)[13] = "sumJ"
+  colnames(newData)[14] = "sumA"
+  
+  
+  #ajout des colonnes avec les nombres vides
+  for(i in 1:nrow(data)){
+    newData[i,15] = sum(data[i,1:6]==0)
+    newData[i,16] = sum(data[i,7:12]==0)
+  }
+  colnames(newData)[15] = "videsJ"
+  colnames(newData)[16] = "videsA"
+  
+  #ajout des colonnes avec le nombre Ã  1 ou 2
+  for(i in 1:nrow(data)){
+    newData[i,17] = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
+    newData[i,18] = sum(data[i,7:12]==2) + sum(data[i,7:12]==1)
+  }
+  colnames(newData)[17] = "1ou2J"
+  colnames(newData)[18] = "1ou2A"
+  
+  
+  #ajout des colonnes finales
+  for(i in 19:20){
+    newData[,i] = data[,i-decal];
+    colnames(newData)[i] = colnames(data)[i-decal]
+  }
+  
+  return (newData)
+}
+
+awele.dataBis = fx.completeData(awele.data)
+
 #--------------------------------------------------------
-# Résultat
+# R?sultat
 #--------------------------------------------------------
 
-### TEST la somme des 3 premières cases ?
-### --> testé : non
-### TEST la somme des 3 dernières cases ?
-### --> testé : non
+### TEST la somme des 3 premi?res cases ?
+### --> test? : non
+### TEST la somme des 3 derni?res cases ?
+### --> test? : non
 
 # en fonction de la somme ?
 # en fonction du nombre de cases vides ?
-# en foncion du nombre des case sà 1 ou à 2 chez ton adversaire ?
+# en foncion du nombre des case s? 1 ou ? 2 chez ton adversaire ?
            
            
 
@@ -149,23 +199,23 @@ chisq.test(selection[,2] , selection[,3])$p.value #0,24
 
 
 ########
-#Voir les données
+#Voir les donn?es
 ########
 plot(awele.data[,1:12], col=awele.data[,14])
 
 ########
-#Les attributs sont ils indépendants ? Utiliser le Test de Pearson
+#Les attributs sont ils ind?pendants ? Utiliser le Test de Pearson
 ########
 chisq.test(awele.data[,1], awele.data[,12])$p.value
-cout("ca sert à rien")
+cout("ca sert ? rien")
 
 ########
-####Les attributs sont ils corrélés linéairements ?
+####Les attributs sont ils corr?l?s lin?airements ?
 ########
 correlations = cor (awele.val)
-#on elève la diagonale
+#on el?ve la diagonale
 diag (correlations) = 0
-# Et on récupère la valeur absolue
+# Et on r?cup?re la valeur absolue
 correlations = abs (correlations)
 # On les affiches
 print (correlations)
@@ -176,15 +226,15 @@ print (correlations)
 ########
 acp = PCA(awele.val, quanti.sup=awele.data[,14])
 plot.PCA(acp)
-cout("ca sert à rien !")
+cout("ca sert ? rien !")
 
 
 ########
 #### NB 
 #######
-# On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
+# On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
 selection = awele.data [awele.data [, 14] == "G", ]
-# Et on construit un modèle de classification avec l'algorithme Naive bayes
+# Et on construit un mod?le de classification avec l'algorithme Naive bayes
 model = naiveBayes (selection [, 1:12], selection [, 13])
 
 
