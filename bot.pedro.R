@@ -1,13 +1,64 @@
-# Chargement de la biblioth?que
+# Chargement de la bibliothèque
 library (e1071)
 
 
-### Fonction Pedro
+########
+### Function qui ajoute la somme au données data à partir de la position posAdd
+### @param data les données. 
+### ---- Les 6 première lignes doivent contenir les données 
+### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+### @return data complété
+sum.fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    data[i,posAdd] = sum(data[i,1:6])
+    data[i,posAdd+1] = sum(data[i,7:12])
+  }
+  colnames(data)[posAdd] = "sumJ"
+  colnames(data)[posAdd+1] = "sumA"  
+  return (data)
+}
+# decalage
+sum.decal = 2
+########
+
+
+########
+### Function qui ajoute la somme au données data à partir de la position posAdd
+### @param : data les données. 
+### ---- Les 6 première lignes doivent contenir les données 
+### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+### @posAdd : la position à laquelle les données vont être ajoutées
+### @fx : la fonction a effectuer
+### @decal : le décalage opéré par la fonction
+### @return data complété
+addData = function(data, posAdd, fx, decal){
+  
+  # création de la nouvelle matrice
+  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
+  
+  #ajout des colonnes de base
+  for(i in 1:12){
+    newData[,i] = data[,i];
+    colnames(newData)[i] = colnames(data)[i]
+  }
+  
+  newData = fx(newData,posAdd)
+  
+  #Si l'insertion ne se fesait pas à la fin, je rajoute les colonnes après l'insertion
+  if(ncol(data)>=posAdd){    
+    for(i in posAdd:ncol(data)){            
+      newData[,i+decal] = data[,i]
+      colnames(newData)[i+decal] = colnames(data)[i]
+    }
+  }
+  return (newData)
+}
+
 
 ## Fonction qui rajoute les données au tableau existant
 fx.completeData = function(data){
   
-  cat("complete")
   # création d'une nouvelle frame avec 6 colonnes en plus
   decal = 6
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
@@ -54,7 +105,7 @@ fx.completeData = function(data){
   return (newData)
 }
 
-# Chargement des donn?es
+# Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 awele.data = fx.completeData(awele.data)
 
@@ -82,7 +133,7 @@ pedro.model = pedro.create.model (awele.data)
 # Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
 pedro.exec = function (awele, model)
 {
-  # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
+  # On récupère l'ztat du plateau de jeu (sous la forme d'une matrice plutÔt que d'un vecteur)
   g = graines.matrix (awele)
   
   ####
@@ -123,7 +174,7 @@ pedro = function (awele) return (pedro.exec (awele, pedro.model))
 ###################
 
 # On utilise toutes les observation
-# On construit un mod?le de Naive Bayes ? partir des 13 premi?res variables de ces observations
+# On construit un modéle de Naive Bayes à partir des 13 premières variables de ces observations
 # On essaye de pr?dire la 14e variable (coup gagnant ou perdant)
 # Pour une nouvelle observation, on ne dispose que des 12 premi?re variables
 # On fait la pr?diction pour chaque valeur possible ? la 13e variable
