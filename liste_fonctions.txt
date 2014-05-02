@@ -1,0 +1,11 @@
+
+Liste des fonctions : 
+
+ -> Naive Bayes
+ -> K-nearest neighbors
+ -> AFD
+ -> SVM
+ -> ADL
+ -> RL
+ -> Cart 
+ -> Perceptron Multi-Couche
