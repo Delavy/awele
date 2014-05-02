@@ -9,3 +9,6 @@ Liste des fonctions :
  -> RL
  -> Cart 
  -> Perceptron Multi-Couche
+ 
+ Pas dans le cours : 
+ ->
