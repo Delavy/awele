@@ -1,6 +1,6 @@
 #setwd ("/chemin/vers/les/fichiers/")
 
-# Chargement du jeu d'Aw?l? en R
+# Chargement du jeu d'Awélé en R
 source ("awele.R")
 
 # Chargement des bots nb et nb2
@@ -11,7 +11,8 @@ source ("bot.random.R")
 
 source ("bot.pedro.R")
 source ("bot.ludo.R")
-# Matchs entre nb et random
+
+# Matchs entre nb et pedro
 print (awele.match (pedro, nb))
 
 # Matchs entre nb2 et random
