@@ -1,60 +1,8 @@
 # Chargement de la bibliothèque
 library (e1071)
 
-
-########
-### Function qui ajoute la somme au données data à partir de la position posAdd
-### @param data les données. 
-### ---- Les 6 première lignes doivent contenir les données 
-### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
-### @return data complété
-sum.fonction = function(data, posAdd){
-  #ajout des colonnes avec les sommes
-  for(i in 1:nrow(data)){
-    data[i,posAdd] = sum(data[i,1:6])
-    data[i,posAdd+1] = sum(data[i,7:12])
-  }
-  colnames(data)[posAdd] = "sumJ"
-  colnames(data)[posAdd+1] = "sumA"  
-  return (data)
-}
-# decalage
-sum.decal = 2
-########
-
-
-########
-### Function qui ajoute la somme au données data à partir de la position posAdd
-### @param : data les données. 
-### ---- Les 6 première lignes doivent contenir les données 
-### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
-### @posAdd : la position à laquelle les données vont être ajoutées
-### @fx : la fonction a effectuer
-### @decal : le décalage opéré par la fonction
-### @return data complété
-addData = function(data, posAdd, fx, decal){
-  
-  # création de la nouvelle matrice
-  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
-  
-  #ajout des colonnes de base
-  for(i in 1:12){
-    newData[,i] = data[,i];
-    colnames(newData)[i] = colnames(data)[i]
-  }
-  
-  newData = fx(newData,posAdd)
-  
-  #Si l'insertion ne se fesait pas à la fin, je rajoute les colonnes après l'insertion
-  if(ncol(data)>=posAdd){    
-    for(i in posAdd:ncol(data)){            
-      newData[,i+decal] = data[,i]
-      colnames(newData)[i+decal] = colnames(data)[i]
-    }
-  }
-  return (newData)
-}
-
+# Chargement des fonction de addData
+source("addData.r")
 
 ## Fonction qui rajoute les données au tableau existant
 fx.completeData = function(data){
@@ -63,38 +11,16 @@ fx.completeData = function(data){
   decal = 6
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  #ajout des colonnes de base
+  # ajout des colonnes de base
   for(i in 1:12){
     newData[,i] = data[,i];
     colnames(newData)[i] = colnames(data)[i]
   }
   
-  
-  #ajout des colonnes avec les sommes
-  for(i in 1:nrow(data)){
-    newData[i,13] = sum(data[i,1:6])
-    newData[i,14] = sum(data[i,7:12])
-  }
-  colnames(newData)[13] = "sumJ"
-  colnames(newData)[14] = "sumA"
-  
-  
-  #ajout des colonnes avec les nombres vides
-  for(i in 1:nrow(data)){
-    newData[i,15] = sum(data[i,1:6]==0)
-    newData[i,16] = sum(data[i,7:12]==0)
-  }
-  colnames(newData)[15] = "videsJ"
-  colnames(newData)[16] = "videsA"
-  
-  #ajout des colonnes avec le nombre à 1 ou 2
-  for(i in 1:nrow(data)){
-    newData[i,17] = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
-    newData[i,18] = sum(data[i,7:12]==2) + sum(data[i,7:12]==1)
-  }
-  colnames(newData)[17] = "1ou2J"
-  colnames(newData)[18] = "1ou2A"
-  
+  # ajout des colonnes de somme, vides, et sum1ou2
+  newData = addData(newData, 13, somme )
+  newData = addData(newData, 15, vide)
+  newData = addData(newData, 17, sum1ou2)  
   
   #ajout des colonnes finales
   for(i in 19:20){
@@ -105,10 +31,12 @@ fx.completeData = function(data){
   return (newData)
 }
 
+
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
-awele.data = fx.completeData(awele.data)
 
+# Ajout des données supplémentaires
+awele.data = fx.completeData(awele.data)
 
 
 ####################
@@ -142,32 +70,26 @@ pedro.exec = function (awele, model)
   # recopie de g
   g2 = data.frame(matrix(data=0, nr = nrow(g), nc=ncol(g)+6))
   
+  # on ajoute les colonnes de base
   for(i in 1:12){
     g2[,i] = g[,i]
   }
   
   # sum
-  g2[13] = sum(g[1:6])
-  g2[14] = sum(g[7:12])
-  
-  # vides
-  g2[15] = sum(g[1:6]==0)
-  g2[16] = sum(g[7:12]==0)
-  
-  # 1ou2
-  g2[17] = sum(g[1:6]==1) + sum(g[1:6]==2)
-  g2[18] = sum(g[7:12]==1) + sum(g[7:12]==2)
-  
+  g2 = addData(g2, 13, somme)
+  g2 = addData(g2, 15, vide)
+  g2 = addData(g2, 15, sum1ou2)
+    
   g = g2;
   
-  
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
-  colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "sumJ", "sumA", "videsJ", "videsA", "1ou2J","1ou2A")
+  colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
   # On applique le mod?le et on retourne les pr?dictions (sous la forme de degr?s d'appartenance aux classes)
   return (predict (model, g, type = "raw"))
 }
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 pedro = function (awele) return (pedro.exec (awele, pedro.model))
+
 
 ###################
 # Seconde version #
