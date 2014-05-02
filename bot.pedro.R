@@ -8,7 +8,7 @@ library (e1071)
 ### ---- Les 6 première lignes doivent contenir les données 
 ### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ### @return data complété
-sum.fonction = function(data, posAdd){
+somme.fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     data[i,posAdd] = sum(data[i,1:6])
@@ -19,8 +19,11 @@ sum.fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-sum.decal = 2
+somme.decal = 2
+somme = list(fonction = somme.fonction, decal = somme.decal)
 ########
+
+
 
 
 ########
@@ -32,8 +35,9 @@ sum.decal = 2
 ### @fx : la fonction a effectuer
 ### @decal : le décalage opéré par la fonction
 ### @return data complété
-addData = function(data, posAdd, fx, decal){
+addData = function(data, posAdd, fx){
   
+  decal = fx$decal
   # création de la nouvelle matrice
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
   
@@ -43,7 +47,7 @@ addData = function(data, posAdd, fx, decal){
     colnames(newData)[i] = colnames(data)[i]
   }
   
-  newData = fx(newData,posAdd)
+  newData = fx$fonction(newData,posAdd)
   
   #Si l'insertion ne se fesait pas à la fin, je rajoute les colonnes après l'insertion
   if(ncol(data)>=posAdd){    
@@ -69,14 +73,7 @@ fx.completeData = function(data){
     colnames(newData)[i] = colnames(data)[i]
   }
   
-  
-  #ajout des colonnes avec les sommes
-  for(i in 1:nrow(data)){
-    newData[i,13] = sum(data[i,1:6])
-    newData[i,14] = sum(data[i,7:12])
-  }
-  colnames(newData)[13] = "sumJ"
-  colnames(newData)[14] = "sumA"
+  newData = addData(newData, 13,somme )
   
   
   #ajout des colonnes avec les nombres vides
@@ -147,8 +144,7 @@ pedro.exec = function (awele, model)
   }
   
   # sum
-  g2[13] = sum(g[1:6])
-  g2[14] = sum(g[7:12])
+  g2 = addData(g2, 13, somme)
   
   # vides
   g2[15] = sum(g[1:6]==0)
