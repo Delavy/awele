@@ -13,7 +13,7 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 # On essaye de pr?dire la 13e variable (coup jou?)
 
 # Fonction de construction du mod?les
-ludo.create.model = function (dataset)
+botADL1.create.model = function (dataset)
 {
   # On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
   selection = awele.data [dataset [, 14] == "G", ]
@@ -23,9 +23,9 @@ ludo.create.model = function (dataset)
   return (model)
 }
 # Construction du mod?le
-ludo.model = ludo.create.model (awele.data)
+botADL1.model = botADL1.create.model (awele.data)
 # Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
-ludo.exec = function (awele, model)
+botADL1.exec = function (awele, model)
 {
   # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
   g = graines.matrix (awele)
@@ -42,5 +42,5 @@ ludo.exec = function (awele, model)
   return (ret)
 }
 # Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
-ludo = function (awele) return (ludo.exec (awele, ludo.model))
+botADL1 = function (awele) return (botADL1.exec (awele, botADL1.model))
 
