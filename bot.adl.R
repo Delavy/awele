@@ -51,12 +51,12 @@ botADL1 = function (awele) return (botADL1.exec (awele, botADL1.model))
 # On essaye de prédire la 14e variable (coup gagnant ou perdant)
 # Pour une nouvelle observation, on ne dispose que des 12 première variables
 # On fait la prédiction pour chaque valeur possible à la 13e variable
-fakegraines = function()  return (data.frame(matrix(data=4,ncol=6,nrow=1))) 
+fakegraines = function()  return (data.frame(matrix(data=4,ncol=12,nrow=1))) 
 # Fonction de construction du modèle ADL
 botADL2.create.model = function (dataset)
 {
-  model2 = LDA (dataset [, 1:13], dataset [, 14])
-  return (model2)
+  model = LDA (dataset [, 1:13], dataset [, 14])
+  return (model)
 }
 # Construction du modèle
 botADL2.model = botADL2.create.model (awele.data)
@@ -69,7 +69,7 @@ botADL2.exec = function (awele, model)
   g2 = as.data.frame (g2 [rep (1, 6), ])
   
   # On ajoute une 13e colonne qui contient les six valeurs possibles
-  g2 = cbind (g2, factor (1:6, labels = levels (awele.data [, 14])))
+  g2 = cbind (g2, factor (1:6, labels = levels (awele.data [, 13])))
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage  
   colnames (g2) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "C")
   # On applique le modèle
