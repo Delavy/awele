@@ -84,27 +84,27 @@ sum1ou2$decal = 2
 ### @fx : l'objet qui contient fx$fonction et fx$decal
 addData = function(data, posAdd, fx){
   
-  decal = fx$decal
+  #decal = fx$decal
   
   # création de la nouvelle matrice en ajoutant le nombre de colonne de décal
-  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
+  #newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
   
   # ajout des colonnes de base
-  for(i in 1:(posAdd-1)){
-    newData[,i] = data[,i];
-    colnames(newData)[i] = colnames(data)[i]
-  }
+#  for(i in 1:(posAdd-1)){
+#    newData[,i] = data[,i];
+#    colnames(newData)[i] = colnames(data)[i]
+#  }
   
   # ajout des colonne de fx
-  newData = fx$fonction(newData,posAdd)
+  newData = fx$fonction(data,posAdd)
   
   # Si l'insertion ne se faisait pas à la fin, je rajoute les colonnes après l'insertion
-  if(ncol(data)>=posAdd){    
-    for(i in posAdd:ncol(data)){            
-      newData[,i+decal] = data[,i]
-      colnames(newData)[i+decal] = colnames(data)[i]
-    }
-  }
+#  if(ncol(data)>=posAdd){    
+#    for(i in posAdd:ncol(data)){            
+#      newData[,i+decal] = data[,i]
+#      colnames(newData)[i+decal] = colnames(data)[i]
+#    }
+#  }
   
   return (newData)
 }
