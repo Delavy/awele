@@ -94,6 +94,44 @@ posMax$decal = 2
 ######################
 
 ######################
+### Pos Max
+######################
+### posMax$function : function qui ajoute la position de la maximum
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   @return data complété
+### posMAx$decal : décalage apporté par l'ajout des données par la fonction
+bidoua  = list(fonction = NULL, decal = NULL)
+bidoua$fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    accu1 = match(max(data[i,1:6]), data[i,1:6])
+    for(j in 1:6){
+      n = data[i,j]
+      x = j - accu1
+      data[i,posAdd] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
+    }
+    
+    accu2 = match(max(data[i,7:12]), data[i,7:12])
+    for(j in 7:12){
+      n = data[i,j]
+      x = j - accu2
+      data[i,posAdd] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
+    }        
+  }
+  
+  for(n in posAdd:(posAdd+11)){
+    colnames(data)[n] = paste ("bidou", n, sep = "")
+  }
+
+  return (data)
+}
+# decalage
+bidoua$decal = 12
+######################
+
+######################
 ### Vide
 ######################
 ### vide$function : function qui ajoute la somme vides au données data à partir de la position posAdd

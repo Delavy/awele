@@ -3,7 +3,7 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-pedrobis.decalage = 8
+pedrobis.decalage = 2
 
 
 ########
@@ -30,8 +30,8 @@ fx.completeDataBis = function(data){
   
   # ajout des colonnes de somme, vides, et sum1ou2
   newData = addData(newData, 13, sum1ou2)  
-  newData = addData(newData, 15, somme )
-  newData = addData(newData, 17, vide )
+  #newData = addData(newData, 15, somme )
+  #newData = addData(newData, 17, vide )
   
   # si il reste des colonnes
   if(ncol(newData)>(12+decal)){    

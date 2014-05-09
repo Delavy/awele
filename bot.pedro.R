@@ -3,7 +3,7 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-pedro.decalage = 8
+pedro.decalage = 12
  
 
 ########
@@ -29,10 +29,10 @@ fx.completeData = function(data){
   }
   
   # ajout des colonnes de somme, vides, et sum1ou2
-  newData = addData(newData, 13, sum1ou2)  
-  newData = addData(newData, 15, somme )
-  newData = addData(newData, 17, vide )
-  newData = addData(newData, 19, posMax)
+  newData = addData(newData, 13, bidoua)  
+  #newData = addData(newData, 15, somme )
+  #newData = addData(newData, 17, vide )
+  #newData = addData(newData, 19, posMax)
   #newData = addData(newData, 21, nbVidesAvantPleine)
   
   
