@@ -3,8 +3,8 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-pedro.decalage = 6
-
+pedro.decalage = 8
+ 
 
 ########
 ### Function qui rajoute les données au tableau existant
@@ -16,18 +16,25 @@ fx.completeData = function(data){
   decal = pedro.decalage
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  # ajout des colonnes de base
+  # Recopie des colonnes de base
   for(i in 1:12){
     newData[,i] = data[,i];
-    if(length(colnames(data))>0){
+  }
+  
+  # Recopie de noms de colonnes si il y en a
+  if(length(colnames(data))>0){
+    for(i in 1:12){    
       colnames(newData)[i] = colnames(data)[i]
     }
   }
   
   # ajout des colonnes de somme, vides, et sum1ou2
-  newData = addData(newData, 13, somme )
-  newData = addData(newData, 15, vide)
-  newData = addData(newData, 17, sum1ou2)  
+  newData = addData(newData, 13, sum1ou2)  
+  newData = addData(newData, 15, somme )
+  newData = addData(newData, 17, vide )
+  newData = addData(newData, 19, posMax)
+  #newData = addData(newData, 21, nbVidesAvantPleine)
+  
   
   # si il reste des colonnes
   if(ncol(newData)>(12+decal)){    
@@ -46,8 +53,8 @@ fx.completeData = function(data){
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-# Ajout des données supplémentaires 
-awele.data = fx.completeData(awele.data)
+# Ajout des données supplémentaires  
+#awele.data = fx.completeData(awele.data)
 
 
 ####################
@@ -61,9 +68,11 @@ awele.data = fx.completeData(awele.data)
 # Fonction de construction du modèle
 
 pedro.create.model = function (dataset){
+  dataset = fx.completeData(dataset)
   decal = pedro.decalage
   # On s?lectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
-  selection = awele.data [dataset [, (14+decal)] == "G", ]
+  
+  selection = dataset [dataset [, (14+decal)] == "G", ]
   # Et on construit un mod?le de classification avec l'algorithme Naive bayes
   model = naiveBayes (selection [, (1:12+decal)], selection [, (13+decal)])
   return (model)

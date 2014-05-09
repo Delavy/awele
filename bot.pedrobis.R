@@ -3,89 +3,86 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-mega.decal2 = 4
+pedrobis.decalage = 8
 
 
-fx.addSupp2 = function(newData){
-  # ajout des colonnes de somme, vides, et sum1ou2
-  #newData = addData(newData, 13, somme )
-  newData = addData(newData, 13, vide)
-  newData = addData(newData, 15, sum1ou2)  
-  return (newData)
-}
-
-## Fonction qui rajoute les données au tableau existant
-fx.completeData2 = function(data){
+########
+### Function qui rajoute les données au tableau existant
+### @param : data : les données. 
+### @return : les données avec les colonnes rajoutées
+fx.completeDataBis = function(data){
   
   # création d'une nouvelle frame avec 6 colonnes en plus
-  decal = mega.decal2
+  decal = pedrobis.decalage
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  # ajout des colonnes de base
+  # Recopie des colonnes de base
   for(i in 1:12){
     newData[,i] = data[,i];
-    colnames(newData)[i] = colnames(data)[i]
+  }
+  
+  # Recopie de noms de colonnes si il y en a
+  if(length(colnames(data))>0){
+    for(i in 1:12){    
+      colnames(newData)[i] = colnames(data)[i]
+    }
   }
   
   # ajout des colonnes de somme, vides, et sum1ou2
-  newData = fx.addSupp2(newData)
+  newData = addData(newData, 13, sum1ou2)  
+  newData = addData(newData, 15, somme )
+  newData = addData(newData, 17, vide )
   
-  #ajout des colonnes finales
-  for(i in (13+decal):(14+decal)){
-    newData[,i] = data[,i-decal];
-    colnames(newData)[i] = colnames(data)[i-decal]
+  # si il reste des colonnes
+  if(ncol(newData)>(12+decal)){    
+    #ajout des colonnes finales
+    for(i in (13+decal):ncol(newData)){
+      newData[,i] = data[,i-decal];
+      colnames(newData)[i] = colnames(data)[i-decal]
+    }
   }
   
   return (newData)
 }
+########
 
 
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-# Ajout des données supplémentaires
-awele.data = fx.completeData(awele.data)
-
 
 ####################
-# Premi?re version #
+# Première version #
 ####################
 
-# On s?lectionne toutes les observations correspondant aux coups jou?s par le gagnant de la partie
-# On construit un mod?le de Naive Bayes ? partir des 12 premi?res variables de ces observations
-# On essaye de pr?dire la 13e variable (coup jou?)
+# On sélectionne toutes les observations correspondant aux coups joués par le gagnant de la partie
+# On construit un modèle de Naive Bayes à partir des premières variables de ces observations
+# On essaye de prédire la variable du coup joué
 
-# Fonction de construction du mod?les
+# Fonction de construction du modèle
+
 pedrobis.create.model = function (dataset){
-  decal = mega.decal2
-  # On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
-  selection = awele.data [dataset [, (14+decal)] == "G", ]
+  decal = pedrobis.decalage
+  dataset = fx.completeDataBis(dataset)
+  # On s?lectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
+  selection = dataset [dataset [, (14+decal)] == "G", ]
   # Et on construit un mod?le de classification avec l'algorithme Naive bayes
   model = naiveBayes (selection [, (1:12+decal)], selection [, (13+decal)])
   return (model)
 }
-# Construction du mod?le
+# Construction du modèle
 pedrobis.model = pedrobis.create.model (awele.data)
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
+
+
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
 pedrobis.exec = function (awele, model)
 {
-  decal = mega.decal2
-  # On récupère l'ztat du plateau de jeu (sous la forme d'une matrice plutÔt que d'un vecteur)
+  decal = pedrobis.decalage
+  # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutÔt que d'un vecteur)
   g = graines.matrix (awele)
   
-  ####
-  ## on ajoute les colonnes sum, vides, 1ou2
-  #### 
-  # recopie de g
-  g2 = data.frame(matrix(data=0, nr = nrow(g), nc=ncol(g)+decal))
-  
-  # on ajoute les colonnes de base
-  for(i in 1:12){
-    g2[,i] = g[,i]
-  }
-  
-  # sum
-  g = fx.addSupp2(g2)
+  # On ajoute les données
+  g = fx.completeDataBis(g)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))

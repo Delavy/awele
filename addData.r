@@ -27,6 +27,73 @@ somme$decal = 2
 ########
 
 ######################
+### Nombre de vides avant la première pleine
+######################
+### nbVidesAvantPleine$function : function qui ajoute la somme vides au données data à partir de la position posAdd
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   @return data complété
+### nbVidesAvantPleine$decal : décalage apporté par l'ajout des données par la fonction
+nbVidesAvantPleine = list(fonction = NULL, decal = NULL)
+nbVidesAvantPleine$fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    #chez A
+    nbA = 0;
+    for(j in 1:6){
+      if(data[i,j]==0){
+        nbA = nbA + 1
+      }else{
+        break;
+      }
+    }
+    data[i,posAdd] = nbA
+    
+    # chez B
+    nbB = 0
+    for(j in 7:12){
+      if(data[i,j]==0){
+        nbB = nbB + 1
+      }else{
+        break;
+      }
+    }
+    data[i,posAdd+1] = nbB
+  }
+  colnames(data)[posAdd] = "nbVidesBeforePleineJ"
+  colnames(data)[posAdd+1] = "nbVidesBeforePleineA"  
+  return (data)
+}
+# decalage
+nbVidesAvantPleine$decal = 2
+########
+
+######################
+### Pos Max
+######################
+### posMax$function : function qui ajoute la position de la maximum
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   @return data complété
+### posMAx$decal : décalage apporté par l'ajout des données par la fonction
+posMax  = list(fonction = NULL, decal = NULL)
+posMax$fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    data[i,posAdd] = match(max(data[i,1:6]), data[i,1:6])
+    data[i,posAdd+1] = match(max(data[i,7:12]), data[i,7:12])
+  }
+  colnames(data)[posAdd] = "posMaxJ"
+  colnames(data)[posAdd+1] = "posMaxA"  
+  return (data)
+}
+# decalage
+posMax$decal = 2
+######################
+
+######################
 ### Vide
 ######################
 ### vide$function : function qui ajoute la somme vides au données data à partir de la position posAdd
