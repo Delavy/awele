@@ -3,13 +3,13 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-mega.decal1 = 4
+mega.decal1 = 6
 
 
 fx.addSupp = function(newData){
   # ajout des colonnes de somme, vides, et sum1ou2
   newData = addData(newData, 13, somme )
-  #newData = addData(newData, 15, vide)
+  newData = addData(newData, 15, vide)
   newData = addData(newData, 15, sum1ou2)  
   return (newData)
 }
@@ -109,8 +109,9 @@ pedro = function (awele) return (pedro.exec (awele, pedro.model))
 # Fonction de construction du mod?les
 pedro2.create.model = function (dataset)
 {
+  decal = mega.decal1
   # on construit un mod?le de classification avec l'algorithme Naive bayes
-  model = naiveBayes (dataset [, 1:19], dataset [, 20])
+  model = naiveBayes (dataset [, 1:(13+decal)], dataset [, 14+decal])
   return (model)
 }
 # Construction du mod?le
@@ -118,12 +119,29 @@ pedro2.model = pedro2.create.model (awele.data)
 # Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
 pedro2.exec = function (awele, model)
 {
+  decal = mega.decal1
   # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
   g = graines.matrix (awele)
+  
+  ####
+  ## on ajoute les colonnes sum, vides, 1ou2
+  #### 
+  # recopie de g
+  g2 = data.frame(matrix(data=0, nr = nrow(g), nc=ncol(g)+decal))
+  
+  # on ajoute les colonnes de base
+  for(i in 1:12){
+    g2[,i] = g[,i]
+  }
+  
+  # sum
+  g = fx.addSupp(g2)
+    
+  
   # On r?p?te six fois l'?tat du plateau de jeu (et on transforme en data.frame)
   g = as.data.frame (g [rep (1, 6), ])
   # On ajoute une 13e colonne qui contient les six valeurs possibles
-  g = cbind (g, factor (1:6, labels = levels (awele.data [, 19])))
+  g = cbind (g, factor (1:6, labels = levels (awele.data [, 13+decal])))
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage  
   colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "sumJ", "sumA", "videsJ", "videsA", "1ou2J","1ou2A","C")
   # On applique le mod?le
