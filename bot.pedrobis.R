@@ -3,35 +3,54 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-pedrobis.decalage = 2
+
+
+######### Preparation des objets d'enrichissement de données
+### Initialisation de la liste contenant les objets d'enrichisement
+pedrobis.fx = list()
+pedrobis.fx[[1]] = sum1ou2
+#pedrobis.fx[[2]] = somme
+#pedrobis.fx[[3]] = vide
+
+### Calcul du décalage apporté par la liste
+pedrobis.decalage = 0
+for(i in 1:length(pedrobis.fx)){
+  pedrobis.decalage = pedrobis.decalage + pedrobis.fx[[i]]@decal
+}
+
 
 
 ########
 ### Function qui rajoute les données au tableau existant
-### @param : data : les données. 
+### @param data : les données. 
 ### @return : les données avec les colonnes rajoutées
 fx.completeDataBis = function(data){
   
-  # création d'une nouvelle frame avec 6 colonnes en plus
+  # récupération du décalage
   decal = pedrobis.decalage
+  
+  # création d'une nouvelle frame avec les colonnes supplémentaires
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  # Recopie des colonnes de base
+  # Recopie des colonnes de base, ainsi que des nom si il y en as
+  asColNames = length(colnames(data))>0;  
   for(i in 1:12){
     newData[,i] = data[,i];
-  }
-  
-  # Recopie de noms de colonnes si il y en a
-  if(length(colnames(data))>0){
-    for(i in 1:12){    
+    if(asColNames){
       colnames(newData)[i] = colnames(data)[i]
     }
   }
   
-  # ajout des colonnes de somme, vides, et sum1ou2
-  newData = addData(newData, 13, sum1ou2)  
-  #newData = addData(newData, 15, somme )
-  #newData = addData(newData, 17, vide )
+  # Ajout des données par execution des fonctions
+  pos = 13
+  # execution des fonctions 1 par 1
+  for(i in 1:length(pedrobis.fx)){
+    # on execute la fonction
+    newData = pedrobis.fx[[i]]@fonction(newData, pos)
+    #on ajoute le décalage apporté par la fonction
+    pos = pos + pedrobis.fx[[i]]@decal
+  }
+  
   
   # si il reste des colonnes
   if(ncol(newData)>(12+decal)){    
@@ -50,6 +69,9 @@ fx.completeDataBis = function(data){
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
+# Ajout des données supplémentaires  
+#awele.data = fx.completeDataBis(awele.data)
+
 
 ####################
 # Première version #
@@ -62,9 +84,10 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 # Fonction de construction du modèle
 
 pedrobis.create.model = function (dataset){
-  decal = pedrobis.decalage
   dataset = fx.completeDataBis(dataset)
+  decal = pedrobis.decalage
   # On s?lectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
+  
   selection = dataset [dataset [, (14+decal)] == "G", ]
   # Et on construit un mod?le de classification avec l'algorithme Naive bayes
   model = naiveBayes (selection [, (1:12+decal)], selection [, (13+decal)])

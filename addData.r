@@ -1,6 +1,7 @@
 # Chargement de la bibliothèque
 library (e1071)
 
+setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 
 ######################
 ### Somme
@@ -11,8 +12,8 @@ library (e1071)
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### somme$decal : décalage apporté par l'ajout des données par la fonction
-somme = list(fonction = NULL, decal = NULL)
-somme$fonction = function(data, posAdd){
+somme = new("dataSupp")
+somme@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     data[i,posAdd] = sum(data[i,1:6])
@@ -23,7 +24,7 @@ somme$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-somme$decal = 2
+somme@decal = 2
 ########
 
 ######################
@@ -35,8 +36,8 @@ somme$decal = 2
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### nbVidesAvantPleine$decal : décalage apporté par l'ajout des données par la fonction
-nbVidesAvantPleine = list(fonction = NULL, decal = NULL)
-nbVidesAvantPleine$fonction = function(data, posAdd){
+nbVidesAvantPleine = new("dataSupp")
+nbVidesAvantPleine@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     #chez A
@@ -66,7 +67,7 @@ nbVidesAvantPleine$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-nbVidesAvantPleine$decal = 2
+nbVidesAvantPleine@decal = 2
 ########
 
 ######################
@@ -78,8 +79,8 @@ nbVidesAvantPleine$decal = 2
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### posMAx$decal : décalage apporté par l'ajout des données par la fonction
-posMax  = list(fonction = NULL, decal = NULL)
-posMax$fonction = function(data, posAdd){
+posMax =  new("dataSupp")
+posMax@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     data[i,posAdd] = match(max(data[i,1:6]), data[i,1:6])
@@ -90,7 +91,7 @@ posMax$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-posMax$decal = 2
+posMax@decal = 2
 ######################
 
 ######################
@@ -102,8 +103,8 @@ posMax$decal = 2
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### posMAx$decal : décalage apporté par l'ajout des données par la fonction
-bidoua  = list(fonction = NULL, decal = NULL)
-bidoua$fonction = function(data, posAdd){
+bidoua  =  new("dataSupp")
+bidoua@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     accu1 = match(max(data[i,1:6]), data[i,1:6])
@@ -128,7 +129,7 @@ bidoua$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-bidoua$decal = 12
+bidoua@decal = 12
 ######################
 
 ######################
@@ -140,8 +141,8 @@ bidoua$decal = 12
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### vide$decal : décalage apporté par l'ajout des données par la fonction
-vide  = list(fonction = NULL, decal = NULL)
-vide$fonction = function(data, posAdd){
+vide  =  new("dataSupp")
+vide@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     data[i,posAdd] = sum(data[i,1:6]==0)
@@ -152,7 +153,7 @@ vide$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-vide$decal = 2
+vide@decal = 2
 ######################
 
 ######################
@@ -164,8 +165,8 @@ vide$decal = 2
 ###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
 ###   @return data complété
 ### 1out2$decal : décalage apporté par l'ajout des données par la fonction
-sum1ou2  = list(fonction = NULL, decal = NULL)
-sum1ou2$fonction = function(data, posAdd){
+sum1ou2  =  new("dataSupp")
+sum1ou2@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
   for(i in 1:nrow(data)){
     data[i,posAdd]   = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
@@ -176,7 +177,7 @@ sum1ou2$fonction = function(data, posAdd){
   return (data)
 }
 # decalage
-sum1ou2$decal = 2
+sum1ou2@decal = 2
 ######################
 
 
@@ -201,7 +202,7 @@ addData = function(data, posAdd, fx){
 #  }
   
   # ajout des colonne de fx
-  newData = fx$fonction(data,posAdd)
+  newData = fx@fonction(data,posAdd)
   
   # Si l'insertion ne se faisait pas à la fin, je rajoute les colonnes après l'insertion
 #  if(ncol(data)>=posAdd){    

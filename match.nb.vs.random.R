@@ -22,7 +22,7 @@ print (awele.match (nb2, random))
 print (awele.match (nb, nb2))
 
 # Matchs entre botADL1 et nb
-print (awele.match (botADL1, nb))
+print (awele.match (botADL1, nb2))
 
 # Matchs entre botADL2 et nb
 print (awele.match (botADL2, nb))

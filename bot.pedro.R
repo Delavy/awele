@@ -3,39 +3,55 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
-pedro.decalage = 12
- 
+
+
+######### Preparation des objets d'enrichissement de données
+### Initialisation de la liste contenant les objets d'enrichisement
+pedro.fx = list()
+pedro.fx[[1]] = sum1ou2
+#pedro.fx[[2]] = somme
+#pedro.fx[[3]] = vide
+
+### Calcul du décalage apporté par la liste
+pedro.decalage = 0
+for(i in 1:length(pedro.fx)){
+  pedro.decalage = pedro.decalage + pedro.fx[[i]]@decal
+}
+
+
 
 ########
 ### Function qui rajoute les données au tableau existant
-### @param : data : les données. 
+### @param data : les données. 
 ### @return : les données avec les colonnes rajoutées
 fx.completeData = function(data){
   
-  # création d'une nouvelle frame avec 6 colonnes en plus
+  # récupération du décalage
   decal = pedro.decalage
+  
+  # création d'une nouvelle frame avec les colonnes supplémentaires
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  # Recopie des colonnes de base
+  # Recopie des colonnes de base, ainsi que des nom si il y en as
+  asColNames = length(colnames(data))>0;  
   for(i in 1:12){
     newData[,i] = data[,i];
-  }
-  
-  # Recopie de noms de colonnes si il y en a
-  if(length(colnames(data))>0){
-    for(i in 1:12){    
+    if(asColNames){
       colnames(newData)[i] = colnames(data)[i]
     }
   }
   
-  # ajout des colonnes de somme, vides, et sum1ou2
-  newData = addData(newData, 13, bidoua)  
-  #newData = addData(newData, 15, somme )
-  #newData = addData(newData, 17, vide )
-  #newData = addData(newData, 19, posMax)
-  #newData = addData(newData, 21, nbVidesAvantPleine)
-  
-  
+  # Ajout des données par execution des fonctions
+  pos = 13
+  # execution des fonctions 1 par 1
+  for(i in 1:length(pedro.fx)){
+    # on execute la fonction
+    newData = pedro.fx[[i]]@fonction(newData, pos)
+    #on ajoute le décalage apporté par la fonction
+    pos = pos + pedro.fx[[i]]@decal
+  }
+      
+    
   # si il reste des colonnes
   if(ncol(newData)>(12+decal)){    
     #ajout des colonnes finales
