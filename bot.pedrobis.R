@@ -3,12 +3,22 @@ library (e1071)
 
 # Chargement des fonction de addData
 source("addData.r")
+mega.decal2 = 4
+
+
+fx.addSupp2 = function(newData){
+  # ajout des colonnes de somme, vides, et sum1ou2
+  #newData = addData(newData, 13, somme )
+  newData = addData(newData, 13, vide)
+  newData = addData(newData, 15, sum1ou2)  
+  return (newData)
+}
 
 ## Fonction qui rajoute les données au tableau existant
-fx.completeDataBis = function(data){
+fx.completeData2 = function(data){
   
   # création d'une nouvelle frame avec 6 colonnes en plus
-  decal = 2
+  decal = mega.decal2
   newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
   # ajout des colonnes de base
@@ -18,9 +28,7 @@ fx.completeDataBis = function(data){
   }
   
   # ajout des colonnes de somme, vides, et sum1ou2
-  newData = addData(newData, 13, somme )
-  #newData = addData(newData, 15, vide)
-  #newData = addData(newData, 17, sum1ou2)  
+  newData = fx.addSupp2(newData)
   
   #ajout des colonnes finales
   for(i in (13+decal):(14+decal)){
@@ -36,7 +44,7 @@ fx.completeDataBis = function(data){
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
 # Ajout des données supplémentaires
-awele.data = fx.completeDataBis(awele.data)
+awele.data = fx.completeData(awele.data)
 
 
 ####################
@@ -49,7 +57,7 @@ awele.data = fx.completeDataBis(awele.data)
 
 # Fonction de construction du mod?les
 pedrobis.create.model = function (dataset){
-  decal  = 2
+  decal = mega.decal2
   # On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
   selection = awele.data [dataset [, (14+decal)] == "G", ]
   # Et on construit un mod?le de classification avec l'algorithme Naive bayes
@@ -61,7 +69,7 @@ pedrobis.model = pedrobis.create.model (awele.data)
 # Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
 pedrobis.exec = function (awele, model)
 {
-  decal  = 2
+  decal = mega.decal2
   # On récupère l'ztat du plateau de jeu (sous la forme d'une matrice plutÔt que d'un vecteur)
   g = graines.matrix (awele)
   
@@ -77,11 +85,7 @@ pedrobis.exec = function (awele, model)
   }
   
   # sum
-  g2 = addData(g2, 13, somme)
-  #g2 = addData(g2, 15, vide)
-  #g2 = addData(g2, 15, sum1ou2)
-  
-  g = g2;
+  g = fx.addSupp2(g2)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
@@ -90,4 +94,3 @@ pedrobis.exec = function (awele, model)
 }
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 pedrobis = function (awele) return (pedrobis.exec (awele, pedrobis.model))
-
