@@ -4,13 +4,18 @@ library (e1071)
 # Chargement des fonction de addData
 source("addData.r")
 
+fakegraines = function()  return (data.frame(matrix(data=4,ncol=12,nrow=1))) 
+
 
 ######### Preparation des objets d'enrichissement de données
 ### Initialisation de la liste contenant les objets d'enrichisement
 pedro.fx = list()
 pedro.fx[[1]] = sum1ou2
-#pedro.fx[[2]] = somme
-#pedro.fx[[3]] = vide
+pedro.fx[[2]] = somme
+pedro.fx[[3]] = vide
+pedro.fx[[4]] = nbVidesAvantPleine
+pedro.fx[[5]] = posMax
+
 
 ### Calcul du décalage apporté par la liste
 pedro.decalage = 0
@@ -114,3 +119,49 @@ pedro.exec = function (awele, model)
 }
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 pedro = function (awele) return (pedro.exec (awele, pedro.model))
+
+
+
+# On utilise toutes les observation
+# On construit un modèle de Naive Bayes à partir des 13 premières variables de ces observations
+# On essaye de prédire la 14e variable (coup gagnant ou perdant)
+# Pour une nouvelle observation, on ne dispose que des 12 première variables
+# On fait la prédiction pour chaque valeur possible de la 13e variable
+
+# Fonction de construction du modèle
+pedro2.create.model = function (dataset)
+{
+  decal = pedro.decalage
+  dataset = fx.completeData(dataset)
+  # on construit un mod?le de classification avec l'algorithme Naive bayes
+  model = naiveBayes (dataset [, 1:13+decal], dataset [, 14+decal])
+  return (model)
+}
+# Construction du mod?le
+pedro2.model = pedro2.create.model (awele.data)
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
+pedro2.exec = function (awele, model)
+{
+  decal = pedro.decalage
+  # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
+  g = graines.matrix (awele)
+  
+  #on complète avec les données calculées
+  g = fx.completeData(g)
+  
+  # On répète six fois l'état du plateau de jeu (et on transforme en data.frame)
+  g = as.data.frame (g [rep (1, 6), ])
+  
+  # On ajoute une 13e colonne qui contient les six valeurs possibles
+  g = cbind (g, factor (1:6, labels = levels (awele.data [, 13])))
+  
+  # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage  
+  colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
+  colnames (g)[13+decal] = c("C")
+  
+  # On applique le mod?le
+  #et on retourne le degr? d'appartenance ? la classe "G" (probabilit? d'apr?s NB que le coup soit gagnant)
+  return (predict (model, g, type = "raw") [, "G"])
+}
+# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+pedro2 = function (awele) return (pedro2.exec (awele, pedro2.model))
