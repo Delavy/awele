@@ -1,7 +1,7 @@
-# Chargement de la biblioth?que
+# Chargement des bibliothèques
 library (e1071)
 library (fdm2id)
-# Chargement des donn?es
+# Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
 ####################
@@ -32,12 +32,14 @@ botADL1.exec = function (awele, model)
   colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
   # On applique le modèle et on retourne les pr?dictions (sous la forme de degrés d'appartenance aux classes)
   prediction = predict (model, data.frame(g),type = "raw")
-  # tableau à 0
+  
+  # On crée une nouvelle dataframe pour le résultat, tout à 0, et on y colle les noms des colonnes
   ret = data.frame(matrix(data=0, ncol=6, nrow=1))
-  # on remplace les noms des colonnes par C1,... les colonnes du plateau
   colnames(ret) = levels(prediction)
-  # on met la colonne retournée par predict
+  
+  # on set la colonne retournée par prédict ) 1.
   ret[c(prediction[1])] = 1
+  
   return (ret)
 }
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)

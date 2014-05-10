@@ -11,10 +11,10 @@ fakegraines = function()  return (data.frame(matrix(data=4,ncol=12,nrow=1)))
 ### Initialisation de la liste contenant les objets d'enrichisement
 pedro.fx = list()
 pedro.fx[[1]] = sum1ou2
-pedro.fx[[2]] = somme
-pedro.fx[[3]] = vide
-pedro.fx[[4]] = nbVidesAvantPleine
-pedro.fx[[5]] = posMax
+#pedro.fx[[2]] = somme
+#pedro.fx[[3]] = vide
+#pedro.fx[[4]] = nbVidesAvantPleine
+#pedro.fx[[5]] = posMax
 
 
 ### Calcul du décalage apporté par la liste

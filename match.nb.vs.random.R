@@ -11,9 +11,9 @@ source ("bot.random.R")
 
 source ("bot.pedro.R")
 #source ("bot.pedrobis.R")
-#source ("bot.adl.R")
+source ("bot.adl.R")
 # Matchs entre nb et random
-print (awele.match (pedro2, nb2))
+print (awele.match (pedro2, botADL1))
 
 # Matchs entre nb2 et random
 print (awele.match (nb2, random))
