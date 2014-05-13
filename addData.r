@@ -183,8 +183,8 @@ sum1ou2@fonction = function(data, posAdd){
     data[i,posAdd]   = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
     data[i,posAdd+1] = sum(data[i,7:12]==2) + sum(data[i,7:12]==1)
   }
-  colnames(data)[posAdd] = "1ou2J"
-  colnames(data)[posAdd+1] = "1ou2A"  
+  colnames(data)[posAdd] = "1OU2J"
+  colnames(data)[posAdd+1] = "1OU2A"  
   return (data)
 }
 # decalage
@@ -231,36 +231,77 @@ unTour@fonction = function(data, posAdd){
 # decalage
 unTour@decal = 2
 
+
 ########
-### Function qui ajoute la somme au données data à partir de la position posAdd
-### @param : data les données. 
-### ---- Les 6 première lignes doivent contenir les données 
-### ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
-### @posAdd : la position à laquelle les données vont être ajoutées
-### @fx : l'objet qui contient fx$fonction et fx$decal
-addData = function(data, posAdd, fx){
+### Fonction qui retourne la somme des décalage apportés par les fonctions dans listOfFx
+### @param : listOfFx : liste des fonctions classes dataSupp
+### @return : un int représentant le décalage total
+addData.getDecalage = function(listOfFx){
+  decal = 0;
+  for(i in 1:length(listOfFx)){
+    decal = decal + listOfFx[[i]]@decal
+  }
+  return(decal)
+}
+
+######################
+### 1ou2
+######################
+### 1ou2$function : function qui ajoute la somme des case à 1 ou 2 au data à partir de la position posAdd
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
+###   @return data complété
+### 1out2$decal : décalage apporté par l'ajout des données par la fonction
+nulle  =  new("dataSupp")
+nulle@fonction = function(data, posAdd){
+  return (data)
+}
+# decalage
+nulle@decal = 0
+######################
+
+########
+### Function qui rajoute les données au tableau existant
+### @param data : les données. 
+### @param listOfFx : la liste des classes dataSupp
+### @return : les données avec les colonnes rajoutées
+addData.completeData = function(data, listOfFx){
   
-  #decal = fx$decal
+  # récupération du décalage
+  decal = addData.getDecalage(listOfFx)
   
-  # création de la nouvelle matrice en ajoutant le nombre de colonne de décal
-  #newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+decal ))
+  # création d'une nouvelle frame avec les colonnes supplémentaires
+  newData = data.frame(matrix(data=0, nr = nrow(data), nc=ncol(data)+ decal ))
   
-  # ajout des colonnes de base
-#  for(i in 1:(posAdd-1)){
-#    newData[,i] = data[,i];
-#    colnames(newData)[i] = colnames(data)[i]
-#  }
+  # Recopie des colonnes de base, ainsi que des nom si il y en as
+  asColNames = length(colnames(data))>0;  
+  for(i in 1:12){
+    newData[,i] = data[,i];
+    if(asColNames){
+      colnames(newData)[i] = colnames(data)[i]
+    }
+  }
   
-  # ajout des colonne de fx
-  newData = fx@fonction(data,posAdd)
+  # Ajout des données par execution des fonctions
+  pos = 13
+  # execution des fonctions 1 par 1
+  for(i in 1:length(listOfFx)){
+    # on execute la fonction
+    newData = listOfFx[[i]]@fonction(newData, pos)
+    #on ajoute le décalage apporté par la fonction
+    pos = pos + listOfFx[[i]]@decal
+  }
   
-  # Si l'insertion ne se faisait pas à la fin, je rajoute les colonnes après l'insertion
-#  if(ncol(data)>=posAdd){    
-#    for(i in posAdd:ncol(data)){            
-#      newData[,i+decal] = data[,i]
-#      colnames(newData)[i+decal] = colnames(data)[i]
-#    }
-#  }
+  
+  # si il reste des colonnes
+  if(ncol(newData)>(12+decal)){    
+    #ajout des colonnes finales
+    for(i in (13+decal):ncol(newData)){
+      newData[,i] = data[,i-decal];
+      colnames(newData)[i] = colnames(data)[i-decal]
+    }
+  }
   
   return (newData)
 }
