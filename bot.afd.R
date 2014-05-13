@@ -7,9 +7,9 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 #   BotAFD (CDA)   #
 ####################
 
-
+###VERSION 1
 # Fonction de construction du modèle
-afd.create.model = function (dataset)
+afd1.create.model = function (dataset)
 {
   selection = awele.data [dataset [, 14] == "G", ]
   model = CDA(selection [, 1:12], selection [, 13])
@@ -17,10 +17,10 @@ afd.create.model = function (dataset)
 }
 
 # Construction du modèle
-afd.model = afd.create.model (awele.data)
+afd1.model = afd1.create.model (awele.data)
 
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
-afd.exec = function (awele, model)
+afd1.exec = function (awele, model)
 {
   g = graines.matrix (awele)
   colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
@@ -34,7 +34,8 @@ afd.exec = function (awele, model)
   ret[c(prediction[1])] = 1
   
   return (ret)
-  #return (predict (model, g, type = "raw"))
 }
 
-afd = function (awele) return (afd.exec (awele, afd.model))
+afd1 = function (awele) return (afd1.exec (awele, afd1.model))
+
+
