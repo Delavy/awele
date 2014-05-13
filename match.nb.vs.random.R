@@ -14,10 +14,11 @@ source ("bot.pedrobis.R")
 source ("bot.adl.R") 
 source ("bot.rl.R")
 source ("bot.afd.R")
+source ("bot.knn.R")
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # Matchs entre nb et afd
-print (awele.match (nb, svm1))
+print (awele.match (svm1, nb))
 
 # Matchs entre nb et random
 print (awele.match (pedro, nb))
