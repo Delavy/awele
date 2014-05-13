@@ -1,0 +1,3 @@
+Q1 : algo forcément de classification supervisée?
+
+Q2 : est-ce normal que le bot 1 batte bot 2 mais que le bot 3, qui perd contre le bot 2 gagne contre le bot 1?
