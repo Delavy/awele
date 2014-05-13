@@ -18,10 +18,8 @@ source ("bot.afd.R")
 # Matchs entre nb et afd
 print (awele.match (nb, afd))
 
-
-
 # Matchs entre nb et random
-print (awele.match (pedrobis, pedro))
+print (awele.match (pedro, nb))
 
 # Matchs entre nb2 et random
 print (awele.match (nb2, random))
