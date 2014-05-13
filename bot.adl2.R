@@ -9,9 +9,10 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 listOfFxADL = list()
 listOfFxADL[[1]] = somme
 
-####################
-# Première version #
-####################
+########################################
+# TODO : tester quelles fonctions marchent
+########################################
+
 
 # On sélectionne toutes les observations correspondant aux coups joués par le gagnant de la partie
 # On construit un modèle d'ADL à partir des 12 premières variables de ces observations
