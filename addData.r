@@ -3,13 +3,24 @@ library (e1071)
 
 setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 
+#######################
+## Fonctions disponibles : 
+## - bidoua : fonction depuis un livre, qui calcule un potentiel pour chaque case
+## - nbVidesAvantPleines : nombre de cases vides avant la première pleine
+## - posMax : position de la case qui contient le plus de billes
+## - somme : somme des billes
+## - sum1ou2 : sommes des billes à 1ou2
+## - unTour : nombre de cases qui peuvent faire plus d'un tour
+## - vide : nombre de cases vides
+
+
 ######################
 ### Somme
 ######################
 ### somme$function : function qui ajoute la somme vides au données data à partir de la position posAdd
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### somme$decal : décalage apporté par l'ajout des données par la fonction
 somme = new("dataSupp")
@@ -33,7 +44,7 @@ somme@decal = 2
 ### nbVidesAvantPleine$function : function qui ajoute la somme vides au données data à partir de la position posAdd
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### nbVidesAvantPleine$decal : décalage apporté par l'ajout des données par la fonction
 nbVidesAvantPleine = new("dataSupp")
@@ -76,7 +87,7 @@ nbVidesAvantPleine@decal = 2
 ### posMax$function : function qui ajoute la position de la maximum
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### posMAx$decal : décalage apporté par l'ajout des données par la fonction
 posMax =  new("dataSupp")
@@ -100,7 +111,7 @@ posMax@decal = 2
 ### posMax$function : function qui ajoute la position de la maximum
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### posMAx$decal : décalage apporté par l'ajout des données par la fonction
 bidoua  =  new("dataSupp")
@@ -111,14 +122,14 @@ bidoua@fonction = function(data, posAdd){
     for(j in 1:6){
       n = data[i,j]
       x = j - accu1
-      data[i,posAdd] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
+      data[i,posAdd+j-1] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
     }
     
     accu2 = match(max(data[i,7:12]), data[i,7:12])
     for(j in 7:12){
       n = data[i,j]
       x = j - accu2
-      data[i,posAdd] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
+      data[i,posAdd+j-1] = (-1/2)*((n*n)+ (1-(2*x)*n - 2 ))
     }        
   }
   
@@ -138,7 +149,7 @@ bidoua@decal = 12
 ### vide$function : function qui ajoute la somme vides au données data à partir de la position posAdd
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### vide$decal : décalage apporté par l'ajout des données par la fonction
 vide  =  new("dataSupp")
@@ -162,7 +173,7 @@ vide@decal = 2
 ### 1ou2$function : function qui ajoute la somme des case à 1 ou 2 au data à partir de la position posAdd
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd et posAdd+1 doivent être vides car vont etre écrasées
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
 ### 1out2$decal : décalage apporté par l'ajout des données par la fonction
 sum1ou2  =  new("dataSupp")
@@ -180,6 +191,45 @@ sum1ou2@fonction = function(data, posAdd){
 sum1ou2@decal = 2
 ######################
 
+
+######################
+### 1tour
+######################
+### vide$function : function qui ajoute le nombre de cases qui peuvent faire 1 tour ou plus.
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
+###   @return data complété
+### vide$decal : décalage apporté par l'ajout des données par la fonction
+unTour  =  new("dataSupp")
+unTour@fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    sum1tourA = 0;
+    sum1tourB = 0;
+    
+    for(j in 1:6){
+      if(data[i,j]>17-(j-1)){
+        sum1tourA = sum1tourA + 1
+      }
+    }
+      
+    for(j in 7:12){
+      if(data[i,j]>17-(j-7)){
+        sum1tourB = sum1tourB + 1
+      }
+    }    
+  
+    data[i,posAdd+1] = sum1tourB
+    data[i,posAdd] = sum1tourA
+    
+    colnames(data)[posAdd] = "1tourJ"
+    colnames(data)[posAdd+1] = "1tourA"  
+  }
+  return (data)
+}
+# decalage
+unTour@decal = 2
 
 ########
 ### Function qui ajoute la somme au données data à partir de la position posAdd

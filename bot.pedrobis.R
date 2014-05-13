@@ -8,7 +8,7 @@ source("addData.r")
 ######### Preparation des objets d'enrichissement de données
 ### Initialisation de la liste contenant les objets d'enrichisement
 pedrobis.fx = list()
-pedrobis.fx[[1]] = sum1ou2
+pedrobis.fx[[1]] = vide
 #pedrobis.fx[[2]] = somme
 #pedrobis.fx[[3]] = vide
 
