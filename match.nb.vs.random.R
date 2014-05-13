@@ -13,6 +13,13 @@ source ("bot.pedro.R")
 source ("bot.pedrobis.R")
 source ("bot.adl.R")
 source ("bot.rl.R")
+source ("bot.afd.R")
+
+# Matchs entre nb et afd
+print (awele.match (nb, afd))
+
+
+
 # Matchs entre nb et random
 print (awele.match (pedrobis, pedro))
 
