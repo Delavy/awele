@@ -13,10 +13,11 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 #on prend que les gagnants
 mlp1.create.model = function(dataset)
 {
-  selection = awele.data [dataset [, 14] == "G", ]
-  print(selection)
-  #c~. CORRESPOND A LA COLONNE
-  model = nnet(selection[,1:12],selection[,13],size = 1)
+  tunecontrol2=tune.control(sampling="bootstrap", nboot=20, boot.size=1)    
+  selection = dataset [dataset [, 14] == "G", ]  
+  result = splitdata(dataset = selection,target = (13):(14), seed=0)  
+  model = tune.nnet(result$train.x,result$train.y[,1], gamma=2^(-3:3), cost=2^(-3:3), tunecontrol=tunecontrol2, size=12)$best.model  
+  tunecontrole=tune.control(sampling="bootstrap", nboot=20, boot.size=1)
   
   return(model)
 }

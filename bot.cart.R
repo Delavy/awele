@@ -6,7 +6,7 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 
 
 ####################
-#   cart1 (CART)   # A DEBUGGER
+#   cart1 (CART)   # PEDRO DEBUG
 ####################
 
 ###VERSION 1
@@ -14,9 +14,10 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 cart1.create.model = function(dataset)
 {
   selection = awele.data [dataset [, 14] == "G", ]
-  print(selection)
-  #c~. CORRESPOND A LA COLONNE
-  model = rpart(R~., selection[,13], minsplit=10, cp=1)
+  
+  tunecontrole=tune.control(sampling="bootstrap", nboot=20, boot.size=1)
+  result = splitdata(dataset = selection,target = 13:14, seed=0)  
+  model = tune.rpart(result$train.x, data = result$train.y,tunecontrol=tunecontrole)$best.model
   return(model)
 }
 cart1.model = cart1.create.model (awele.data)
@@ -25,7 +26,7 @@ cart1.exec = function (awele, model)
 {
   g = graines.matrix(awele)
   
-  colnames(g) = c(paste("J",1:6,sep=""),paster("A",1:6,sep=""))
+  colnames(g) = c(paste("J",1:6,sep=""),paste("A",1:6,sep=""))
   #type = prob, conseillé par le prof
   return (max.col(predict(model,g,type="prob")))
 }
