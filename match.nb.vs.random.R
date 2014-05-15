@@ -15,17 +15,19 @@ source ("bot.adl2.R")     #botADL2
 source ("bot.afd.R")      #afd1
 source ("bot.rl.R")       #RL
 source ("bot.knn.R")      # knn1
+source ("bot.ludo.R")     #mlpludo
 #source ("bot.cart.R")   # not working
 
 ##### Attention, prennent du temps à charger
 #source ("bot.svm2.R")   # svm2
 #source ("bot.svm.R")    # svm
+#source ("bot.ludo.R")     #mlpludo
 
 
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # MATCH
-print (awele.match (nb, nb2))
+print (awele.match (nb2, mlpludo))
 
 
 
