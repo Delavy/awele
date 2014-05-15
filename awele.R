@@ -1,4 +1,4 @@
-# Classe représentant une partie d'Awele en cours
+# Classe reprÃ©sentant une partie d'Awele en cours
 setClass ("awele.class", representation (graines = "vector", joueurs = "vector", score = "vector"))
 
 initialisation.awele.test = function (graines, joueur1 = "Joueur 1", joueur2 = "Joueur 2")
@@ -16,16 +16,25 @@ initialisation.awele = function (joueur1 = "Joueur 1", joueur2 = "Joueur 2")
   return (r)
 }
 
-# État du plateau de jeu
+# Affichage de l'Ã©tat du plateau de jeu
+print.awele = function (x, ...)
+{
+  print (paste (x$joueurs [2], ":", score.adversaire (x)))
+  print (paste (graines.adversaire (x) [6:1], collapse = " "))
+  print (paste (graines.joueur (x), collapse = " "))
+  print (paste (x$joueurs [1], ":", score.joueur (x)))
+}
+
+# Ã‰tat du plateau de jeu
 graines = function (awele) awele$graines
 
-# État du plateau de jeu (matrice de 12 colonnes)
+# Ã‰tat du plateau de jeu (matrice de 12 colonnes)
 graines.matrix = function (awele) matrix (awele$graines, ncol = 12)
 
-# État du plateau de jeu du côté du joueur actif
+# Ã‰tat du plateau de jeu du cÃ´tÃ© du joueur actif
 graines.joueur = function (awele) awele$graines [1:6]
 
-# État du plateau de jeu du côté de l'adversaire du joueur actif
+# Ã‰tat du plateau de jeu du cÃ´tÃ© de l'adversaire du joueur actif
 graines.adversaire = function (awele) awele$graines [7:12]
 
 # Nombre de graines encore en jeu
@@ -51,7 +60,7 @@ change.joueur = function (awele)
   return (r)
 }
 
-# Teste la validité d'un coup en fonction de l'état du plateau de jeu
+# Teste la validitÃ© d'un coup en fonction de l'Ã©tat du plateau de jeu
 coups.valides = function (awele)
 {
   valide = (graines.joueur (awele) > 0 & any (graines.adversaire (awele) > 0))
@@ -59,7 +68,7 @@ coups.valides = function (awele)
   return (valide)
 }
 
-# Choix d'un coup selon l'état du plateau de jeu (validité du coup) et la décision du joueur (score sur chacun des coups possibles)
+# Choix d'un coup selon l'Ã©tat du plateau de jeu (validitÃ© du coup) et la dÃ©cision du joueur (score sur chacun des coups possibles)
 choix.coup = function (awele, decision)
 {
   scoring = decision
@@ -67,7 +76,7 @@ choix.coup = function (awele, decision)
   return (which.max (scoring))
 }
 
-# Retourne la distance maximale parcourue par les graines quand elles sont distribués
+# Retourne la distance maximale parcourue par les graines quand elles sont distribuÃ©s
 distance = function (awele, choix)
 {
   graines = graines (awele)
@@ -77,7 +86,7 @@ distance = function (awele, choix)
   return (d)
 }
 
-# Retourne la dernière case de l'égrenage
+# Retourne la derniÃ¨re case de l'Ã©grenage
 dernier = function (awele, choix) return (((choix + distance (awele, choix) - 1) %% 12) + 1)
 
 # Distribution des graines
@@ -93,8 +102,8 @@ egrenage = function (awele, choix)
   return (r)
 }
 
-# Résolution des prises (en fonction de l'état du plateau après l'égrenage et de la dernière case remplie)
-# Mise à jour du score
+# RÃ©solution des prises (en fonction de l'Ã©tat du plateau aprÃ¨s l'Ã©grenage et de la derniÃ¨re case remplie)
+# Mise Ã  jour du score
 prises = function (awele, dernier)
 {
   if (dernier > 6)
@@ -119,7 +128,7 @@ prises = function (awele, dernier)
   return (awele)
 }
 
-# Réalisation d'un coup en fonction de l'état du plateau de jeu et du choix qui a été fait par le joueur
+# RÃ©alisation d'un coup en fonction de l'Ã©tat du plateau de jeu et du choix qui a Ã©tÃ© fait par le joueur
 jouer.coup = function (awele, choix)
 {
   der = dernier (awele, choix)
@@ -128,13 +137,13 @@ jouer.coup = function (awele, choix)
   return (awele)
 }
 
-# Retourne le résultat actuel (vainqueur) de la partie
+# Retourne le rÃ©sultat actuel (vainqueur) de la partie
 resultat = function (awele)
 {
   score = awele$score
   res = ""
   if (score [1] == score [2])
-    res = paste ("Égalité (", score [1], " - ", score [1], ")", sep = "")
+    res = paste ("Ã‰galitÃ© (", score [1], " - ", score [1], ")", sep = "")
   else
   {
     smax = max (score)
@@ -144,12 +153,14 @@ resultat = function (awele)
   return (res)
 }
 
-# Fonction intermédiaire pour l'affrontement de deux bots à l'Awélé
-awele.exec = function (awele, bot1, bot2)
+# Fonction intermÃ©diaire pour l'affrontement de deux bots Ã  l'AwÃ©lÃ©
+awele.exec = function (awele, bot1, bot2, debug = F)
 {
   bots = c (bot1, bot2)
   while (nb.graines (awele) > 6 && score.adversaire (awele) < 25)
   {
+    if (debug)
+      print.awele (awele)
     if (all (coups.valides (awele) == F))
     {
       awele$score [1] = awele$score [1] + nb.graines.joueur (awele)
@@ -158,22 +169,31 @@ awele.exec = function (awele, bot1, bot2)
     else
     {
       decision = bots [[1]] (awele)
+      if (length (decision) != 6)
+        stop (paste ("Bot non conforme :", awele$joueurs [1]))
+      print (paste (round (decision, 3), collapse = " "))
       bots = bots [c (2, 1)]
       choix = choix.coup (awele, decision)
+      if (debug)
+        print (paste ("Coup choisi :", choix))
       awele = jouer.coup (awele, choix)
       awele = change.joueur (awele)
+      if (debug)
+        print ("******************")
     }
   }
+  if (debug)
+    print.awele (awele)
   return (resultat (awele))
 }
 
 # Fonction principale
-# Fait s'affronter deux bots à l'Awélé et retourne le résultat
-awele.match = function (bot1, bot2)
+# Fait s'affronter deux bots Ã  l'AwÃ©lÃ© et retourne le rÃ©sultat
+awele.match = function (bot1, bot2, debug = F)
 {
   awele = initialisation.awele (deparse (substitute (bot1)), deparse (substitute (bot2)))
-  print (awele.exec (awele, bot1, bot2))
+  print (awele.exec (awele, bot1, bot2, debug))
   awele = initialisation.awele (deparse (substitute (bot2)), deparse (substitute (bot1)))
-  print (awele.exec (awele, bot2, bot1))
-  return ("Terminé")
+  print (awele.exec (awele, bot2, bot1, debug))
+  return ("TerminÃ©")
 }

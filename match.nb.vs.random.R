@@ -27,7 +27,7 @@ source ("bot.ludo.R")     #mlpludo
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # MATCH
-print (awele.match (nb, mlpludo))
+print (awele.match (nb2, mlpludo))
 
 
 
