@@ -70,12 +70,12 @@ score1 = evalclassif(data, 13:14)
 
 # On ajoute les données et on test
 listOfFx = list(sum1ou2)
-data = addData.completeData(data, listOfFx)
+dataB = addData.completeData(data, listOfFx)
 decal = addData.getDecalage(listOfFx)
-score2 = evalclassif(data, (13+decal):(14+decal))
+score2 = evalclassif(dataB, (13+decal):(14+decal))
 
 # On ajoute les données et on test
-listOfFx = list(sum1ou2, vide)
-data = addData.completeData(data, listOfFx)
+listOfFx = list(vide)
+dataB = addData.completeData(data, listOfFx)
 decal = addData.getDecalage(listOfFx)
-score3 = evalclassif(data, (13+decal):(14+decal))
+score3 = evalclassif(dataB, (13+decal):(14+decal))
