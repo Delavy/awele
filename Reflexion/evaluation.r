@@ -67,15 +67,58 @@ evalclassif = function(data, libelles){
 
 # On lance l'évaluation sur les données classiques
 score1 = evalclassif(data, 13:14)
+resAccu = as.data.frame(max(score1[,1:3]))
+resKapp = as.data.frame(max(score1[,4:6]))
 
-# On ajoute les données et on test
+# resBidoua
 listOfFx = list(sum1ou2)
 dataB = addData.completeData(data, listOfFx)
 decal = addData.getDecalage(listOfFx)
-score2 = evalclassif(dataB, (13+decal):(14+decal))
+resBidoua = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resBidoua[,1:3]))
+resKapp = cbind(resKapp,max(resBidoua[,4:6]))
 
-# On ajoute les données et on test
+# POSMAX
+listOfFx = list(posMax)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resPosMax = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resPosMax[,1:3]))
+resKapp = cbind(resKapp,max(resPosMax[,4:6]))
+
+# somme
+listOfFx = list(somme)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resSomme = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resSomme[,1:3]))
+resKapp = cbind(resKapp,max(resSomme[,4:6]))
+
+# SUM1OU2
+listOfFx = list(sum1ou2)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resSum1ou2 = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resSum1ou2[,1:3]))
+resKapp = cbind(resKapp,max(resSum1ou2[,4:6]))
+
+# unTour
+listOfFx = list(unTour)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resUnTour = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resUnTour[,1:3]))
+resKapp = cbind(resKapp,max(resUnTour[,4:6]))
+
+
+# VIDE
 listOfFx = list(vide)
 dataB = addData.completeData(data, listOfFx)
 decal = addData.getDecalage(listOfFx)
-score3 = evalclassif(dataB, (13+decal):(14+decal))
+resVide = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resVide[,1:3]))
+resKapp = cbind(resKapp,max(resVide[,4:6]))
+
+
+print(resAccup)
+print(resKapp)
