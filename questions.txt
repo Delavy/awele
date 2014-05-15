@@ -1,3 +1,6 @@
-Q1 : algo forcément de classification supervisée?
-
+Q1 : comment calculer le gagnant quand [1] "svm2 (32 - 0)" [2] "knn1 (27 - 15)"
 Q2 : est-ce normal que le bot 1 batte bot 2 mais que le bot 3, qui perd contre le bot 2 gagne contre le bot 1?
+Q3 : faires des matchs en locals
+Q4 : faut il rendre 1 bot ou plusieurs bots ? : c'est 1
+Q5 : objets ?
+Q6 : fichier de reflexion en plus ?

@@ -8,7 +8,7 @@ source ("bot.nb.R")
 
 # Chargement du bot random
 source ("bot.random.R")
-source ("bot.svm.R")
+
 source ("bot.pedro.R")
 source ("bot.pedrobis.R")
 source ("bot.adl.R") 
@@ -18,7 +18,7 @@ source ("bot.knn.R")
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # Matchs entre nb et afd
-print (awele.match (svm1, nb))
+print (awele.match (nb2, botADL1))
 
 # Matchs entre nb et random
 print (awele.match (pedro, nb))
@@ -34,3 +34,6 @@ print (awele.match (botADL1, nb2))
 
 # Matchs entre botADL2 et nb
 print (awele.match (botADL2, nb))
+
+source ("bot.svm2.R")
+source ("bot.svm.R")
