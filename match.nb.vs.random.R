@@ -15,10 +15,12 @@ source ("bot.adl.R")
 source ("bot.rl.R")
 source ("bot.afd.R")
 source ("bot.knn.R")
+source ("bot.cart.R")
+
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # Matchs entre nb et afd
-print (awele.match (nb2, botADL1))
+print (awele.match (cart1, nb))
 
 # Matchs entre nb et random
 print (awele.match (pedro, nb))
