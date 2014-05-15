@@ -1,0 +1,10 @@
+Package: addData
+Type: Package
+Title: Package pour ajouter des donn<c3><a9>es <c3><a0> awele.data
+Version: 1.0
+Date: 2014-05-15
+Author: Delaby Pierre et Nivoix Ludovic
+Description: Package pour ajouter des donn<c3><a9>es <c3><a0> awele.data, avec les fonctions utilitaires et les classes d'ajout de edonn<c3><a9>es
+License: Copyleft
+Depends: methods
+Built: R 3.1.0; ; 2014-05-15 05:58:51 UTC; windows

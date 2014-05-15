@@ -1,0 +1,9 @@
+Package: addData
+Type: Package
+Title: Package pour ajouter des données à awele.data
+Version: 1.0
+Date: 2014-05-15
+Author: Delaby Pierre et Nivoix Ludovic
+Description: Package pour ajouter des données à awele.data, avec les fonctions utilitaires et les classes d'ajout de edonnées
+License: Copyleft
+Depends: methods
