@@ -27,12 +27,12 @@ cart1.exec = function (awele, model)
   
   colnames(g) = c(paste("J",1:6,sep=""),paster("A",1:6,sep=""))
   #type = prob, conseillé par le prof
-  return(predict(model,g,type="raw"))
+  return(predict(model,g,type="prob"))
 }
 cart1 = function (awele) return (cart1.exec (awele, cart1.model))
 
 ####################
-#   cart2 (CART)   # TOURNE PAS ROND !
+#   cart2 (CART)   # ON POURRAIT OPTIMISER CART2 !
 ####################
 
 ###VERSION 2
@@ -53,14 +53,14 @@ cart2.exec = function (awele, model)
   g = graines.matrix (awele)
   c(typeof(g))
 
-  g = as.data.frame (g [rep (1, 6), ])
+  g = as.data.frame (g [rep (1, 12), ])
 
   g = cbind (g, factor (1:6, labels = levels (awele.data [, 13])))
  
   colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""), "C")
 
   var = predict(model,g,type = "prob")
-  #print(var)
+ # print(var)
   return (var[,"G"])
 }
 cart2 = function (awele) return (cart2.exec (awele, cart2.model))
