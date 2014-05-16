@@ -7,6 +7,8 @@ setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 ## Fonctions disponibles : 
 ## - bidoua : fonction depuis un livre, qui calcule un potentiel pour chaque case
 ## - nbVidesAvantPleines : nombre de cases vides avant la première pleine
+## - matrice1ou2 : matrice comprenant true/false si 1 ou 2
+## - nbGange : matrice du nombre de billes gagnées
 ## - posMax : position de la case qui contient le plus de billes
 ## - somme : somme des billes
 ## - sum1ou2 : sommes des billes à 1ou2
@@ -201,6 +203,33 @@ posMax@fonction = function(data, posAdd){
 }
 # decalage
 posMax@decal = 2
+######################
+
+######################
+### Matrice un ou deux
+######################
+### posMax$function : function qui ajoute pour chaque donnée si elle a des billes ) 1 ou 2
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
+###   @return data complété
+### posMAx$decal : décalage apporté par l'ajout des données par la fonction
+matrice1ou2  =  new("dataSupp")
+matrice1ou2@fonction = function(data, posAdd){
+  #ajout des colonnes avec les sommes
+  for(i in 1:nrow(data)){
+    for(j in 1:12){      
+      data[i,posAdd+j-1] = ((data[i,j] == 1) ||  (data[i,j] == 2))
+    }      
+  }
+  for(n in posAdd:(posAdd+11)){
+    colnames(data)[n] = paste ("matricUnOuDeux", n, sep = "")
+  }
+  
+  return (data)
+}
+# decalage
+matrice1ou2@decal = 12
 ######################
 
 ######################

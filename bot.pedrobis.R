@@ -8,7 +8,7 @@ source("addData.r")
 ######### Preparation des objets d'enrichissement de données
 ### Initialisation de la liste contenant les objets d'enrichisement
 listOfFx2 = list()
-listOfFx2[[1]] = sum1ou2
+listOfFx2[[1]] = matrice1ou2
 #pedro.fx[[2]] = somme
 #pedro.fx[[3]] = vide
 #pedro.fx[[4]] = nbVidesAvantPleine

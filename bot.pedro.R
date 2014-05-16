@@ -7,7 +7,7 @@ source("addData.r")
 
 ######### Preparation des objets d'enrichissement de données
 ### Initialisation de la liste contenant les objets d'enrichisement
-listOfFx = list(nbGagne)
+listOfFx = list(sum1ou2)
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 

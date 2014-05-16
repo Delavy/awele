@@ -67,7 +67,7 @@ evalclassif = function(data, libelles){
 
 # On lance l'évaluation sur les données classiques
 score1 = evalclassif(data, 13:14)
-resAccu = as.data.frame(max(score1[,1:3]))
+resAccup = as.data.frame(max(score1[,1:3]))
 resKapp = as.data.frame(max(score1[,4:6]))
 
 # resBidoua
@@ -102,6 +102,14 @@ resSum1ou2 = evalclassif(dataB, (13+decal):(14+decal))
 resAccup = cbind(resAccup,max(resSum1ou2[,1:3]))
 resKapp = cbind(resKapp,max(resSum1ou2[,4:6]))
 
+# Matrice1ou2
+listOfFx = list(matrice1ou2)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resmatrice1ou2 = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resmatrice1ou2[,1:3]))
+resKapp = cbind(resKapp,max(resmatrice1ou2[,4:6]))
+
 # unTour
 listOfFx = list(unTour)
 dataB = addData.completeData(data, listOfFx)
@@ -118,6 +126,15 @@ decal = addData.getDecalage(listOfFx)
 resVide = evalclassif(dataB, (13+decal):(14+decal))
 resAccup = cbind(resAccup,max(resVide[,1:3]))
 resKapp = cbind(resKapp,max(resVide[,4:6]))
+
+# NBGAGNE
+listOfFx = list(nbGagne)
+dataB = addData.completeData(data, listOfFx)
+decal = addData.getDecalage(listOfFx)
+resNbGagne = evalclassif(dataB, (13+decal):(14+decal))
+resAccup = cbind(resAccup,max(resNbGagne[,1:3]))
+resKapp = cbind(resKapp,max(resNbGagne[,4:6]))
+
 
 
 print(resAccup)
