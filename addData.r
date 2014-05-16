@@ -183,8 +183,8 @@ sum1ou2@fonction = function(data, posAdd){
     data[i,posAdd]   = sum(data[i,1:6]==2) + sum(data[i,1:6]==1)
     data[i,posAdd+1] = sum(data[i,7:12]==2) + sum(data[i,7:12]==1)
   }
-  colnames(data)[posAdd] = "1OU2J"
-  colnames(data)[posAdd+1] = "1OU2A"  
+  colnames(data)[posAdd] = "unoudeuxJ"
+  colnames(data)[posAdd+1] = "unoudeuxA"  
   return (data)
 }
 # decalage
