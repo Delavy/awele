@@ -28,7 +28,7 @@ source ("bot.svm.R")    # svm
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # MATCH
-awele.match (cart1, cart2)
+awele.match (botADL2, afd1 )
 
 
 
