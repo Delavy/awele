@@ -171,7 +171,9 @@ awele.exec = function (awele, bot1, bot2, debug = F)
       decision = bots [[1]] (awele)
       if (length (decision) != 6)
         stop (paste ("Bot non conforme :", awele$joueurs [1]))
-      print (paste (round (decision, 3), collapse = " "))
+      if(debug){
+        print (paste (round (decision, 3), collapse = " "))
+      }
       bots = bots [c (2, 1)]
       choix = choix.coup (awele, decision)
       if (debug)
