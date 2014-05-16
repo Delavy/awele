@@ -12,6 +12,7 @@ source ("bot.pedrobis.R") #pedrobis
 source ("bot.adl.R")      #botADL1
 source ("bot.adl12.R")     #adl12
 source ("bot.adlsum.R")     #adlsum
+source ("bot.adlkiller.R")  #adlkiller
 
 source ("bot.afd.R")      #afd1
 source ("bot.rl.R")       #RL

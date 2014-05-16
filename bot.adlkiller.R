@@ -6,7 +6,7 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-listadl12 = list(sum1ou2)
+listOfKiller = list(sum1ou2, somme, posMax, nbGagne)
 
 ########################################
 # TODO : tester quelles fonctions marchent
@@ -18,10 +18,10 @@ listadl12 = list(sum1ou2)
 # On essaye de prédire la 13e variable (coup joué)
 
 # Fonction de construction du modèles
-adl12.create.model = function (dataset)
+adlkiller.create.model = function (dataset)
 {
-  dataset = addData.completeData(dataset, listadl12)
-  decal = addData.getDecalage(listadl12)  
+  dataset = addData.completeData(dataset, listOfKiller)
+  decal = addData.getDecalage(listOfKiller)  
   
   # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
   selection = dataset [dataset [, 14+decal] == "G", ]
@@ -30,14 +30,14 @@ adl12.create.model = function (dataset)
   return (model)
 }
 # Construction du mod?le
-adl12.model = adl12.create.model (awele.data)
+adlkiller.model = adlkiller.create.model (awele.data)
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
-adl12.exec = function (awele, model)
+adlkiller.exec = function (awele, model)
 {
   # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
   
-  g = addData.completeData(g, listadl12)
+  g = addData.completeData(g, listOfKiller)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
@@ -55,4 +55,4 @@ adl12.exec = function (awele, model)
   return (ret)
 }
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
-adl12 = function (awele) return (adl12.exec (awele, adl12.model))
+adlkiller = function (awele) return (adlkiller.exec (awele, adlkiller.model))

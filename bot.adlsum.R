@@ -6,7 +6,7 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-listOfFxADL = list(somme)
+listADLSUM = list(somme)
 
 ########################################
 # TODO : tester quelles fonctions marchent
@@ -20,8 +20,8 @@ listOfFxADL = list(somme)
 # Fonction de construction du modèles
 adlsum.create.model = function (dataset)
 {
-  dataset = addData.completeData(dataset, listOfFxADL)
-  decal = addData.getDecalage(listOfFxADL)  
+  dataset = addData.completeData(dataset, listADLSUM)
+  decal = addData.getDecalage(listADLSUM)  
   
   # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
   selection = dataset [dataset [, 14+decal] == "G", ]
@@ -37,7 +37,7 @@ adlsum.exec = function (awele, model)
   # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
   
-  g = addData.completeData(g, listOfFxADL)
+  g = addData.completeData(g, listADLSUM)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
