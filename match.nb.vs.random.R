@@ -10,7 +10,8 @@ source ("bot.pedro.R")    #pedro
 source ("bot.pedrobis.R") #pedrobis
 
 source ("bot.adl.R")      #botADL1
-source ("bot.adl2.R")     #botADL2
+source ("bot.adl12.R")     #adl12
+source ("bot.adlsum.R")     #adlsum
 
 source ("bot.afd.R")      #afd1
 source ("bot.rl.R")       #RL
@@ -32,7 +33,7 @@ source ("bot.svm.R")    # svm
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # MATCH
-awele.match (botADL2, afd1 )
+awele.match (adl12, adlsum)
 
 
 

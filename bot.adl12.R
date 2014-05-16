@@ -6,8 +6,7 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-listOfFxADL = list()
-listOfFxADL[[1]] = sum1ou2
+listOfFxADL = list(sum1ou2)
 
 ########################################
 # TODO : tester quelles fonctions marchent
@@ -19,7 +18,7 @@ listOfFxADL[[1]] = sum1ou2
 # On essaye de prédire la 13e variable (coup joué)
 
 # Fonction de construction du modèles
-botADL2.create.model = function (dataset)
+adl12.create.model = function (dataset)
 {
   dataset = addData.completeData(dataset, listOfFxADL)
   decal = addData.getDecalage(listOfFxADL)  
@@ -31,9 +30,9 @@ botADL2.create.model = function (dataset)
   return (model)
 }
 # Construction du mod?le
-botADL2.model = botADL2.create.model (awele.data)
+adl12.model = adl12.create.model (awele.data)
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
-botADL2.exec = function (awele, model)
+adl12.exec = function (awele, model)
 {
   # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
@@ -56,4 +55,4 @@ botADL2.exec = function (awele, model)
   return (ret)
 }
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
-botADL2 = function (awele) return (botADL2.exec (awele, botADL2.model))
+adl12 = function (awele) return (adl12.exec (awele, adl12.model))
