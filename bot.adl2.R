@@ -7,7 +7,7 @@ source("addData.r")
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
 listOfFxADL = list()
-listOfFxADL[[1]] = somme
+listOfFxADL[[1]] = sum1ou2
 
 ########################################
 # TODO : tester quelles fonctions marchent
