@@ -15,9 +15,12 @@ cart1.create.model = function(dataset)
 {
   selection = awele.data [dataset [, 14] == "G", ]
   
-  tunecontrole=tune.control(sampling="bootstrap", nboot=20, boot.size=1)
-  result = splitdata(dataset = selection,target = 13:14, seed=0)  
-  model = tune.rpart(result$train.x, data = result$train.y,tunecontrol=tunecontrole)$best.model
+  result = splitdata(dataset = selection ,target = 13:14, seed=0)
+  
+  tunecontrole=tune.control(sampling="bootstrap", nboot=20, boot.size=1)  
+  
+  model = tune.rpart(C~.,cbind.data.frame(Classe=result$train.y[1], result$train.x), minsplit=1,cp=2^(-5:1), tunecontrol=tunecontrole)$best.model
+  
   return(model)
 }
 cart1.model = cart1.create.model (awele.data)
@@ -28,7 +31,11 @@ cart1.exec = function (awele, model)
   
   colnames(g) = c(paste("J",1:6,sep=""),paste("A",1:6,sep=""))
   #type = prob, conseillé par le prof
-  return (max.col(predict(model,g,type="prob")))
+  prediction = predict(model, data.frame(g),type="class")
+  monretour = data.frame(matrix(data=0, ncol = 6, nrow = 1))
+  colnames(monretour) = levels(prediction)
+  monretour[c(prediction[1])] =1
+  return (monretour)
 }
 cart1 = function (awele) return (cart1.exec (awele, cart1.model))
 
@@ -44,6 +51,8 @@ cart2.create.model = function (dataset)
   #selection = awele.data [dataset [, 14] == "G", ]
   # Et on construit un mod?le de classification avec l'algorithme Naive bayes
   #print(dataset)
+  
+  
   model = rpart(R~., dataset [, 1:14], minsplit=1,cp=1)
   return (model)
 }
