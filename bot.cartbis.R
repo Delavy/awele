@@ -15,7 +15,19 @@ source("addData.r")
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
 # On crée la liste des objets dataSupp
-listCart = list(posMax, somme, vide);
+listCart = list(sum1ou2, somme, vide);
+
+######
+# Contre cart 1 : 
+# sum1ou2, vide, posMax, bidoua : cart 1
+# sum1ou2 : cartBis ( 26 // 23)
+# vide : egalite
+# posMax : egalite
+# bidoua : cart1
+#nbVidesAvantPleine : egalite
+# somme : cartBis
+# unTour : egalite
+# sum1ou2, somme : cartBis
 
 
 #####################

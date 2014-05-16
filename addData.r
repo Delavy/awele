@@ -223,8 +223,8 @@ unTour@fonction = function(data, posAdd){
     data[i,posAdd+1] = sum1tourB
     data[i,posAdd] = sum1tourA
     
-    colnames(data)[posAdd] = "1tourJ"
-    colnames(data)[posAdd+1] = "1tourA"  
+    colnames(data)[posAdd] = "untourJ"
+    colnames(data)[posAdd+1] = "untourA"  
   }
   return (data)
 }
