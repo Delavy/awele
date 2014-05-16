@@ -53,7 +53,7 @@ cart2.create.model = function (dataset)
   #print(dataset)
   
   
-  model = rpart(R~., dataset [, 1:14], minsplit=1,cp=1)
+  model = rpart(R~., dataset [, 1:14], minsplit=1,cp=2^(-5:1))
   return (model)
 }
 cart2.model = cart2.create.model (awele.data)

@@ -27,7 +27,7 @@ source ("bot.svm.R")    # svm
 #AFD est pas concluant face à ADL1, RL est plus fort qu'AFD
 
 # MATCH
-print (awele.match (knn1, cart1))
+print (awele.match (nb, mlpludo))
 
 
 

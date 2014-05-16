@@ -160,7 +160,7 @@ awele.exec = function (awele, bot1, bot2, debug = F)
   while (nb.graines (awele) > 6 && score.adversaire (awele) < 25)
   {
     if (debug)
-      print.awele (awele)
+      #print.awele (awele)
     if (all (coups.valides (awele) == F))
     {
       awele$score [1] = awele$score [1] + nb.graines.joueur (awele)
