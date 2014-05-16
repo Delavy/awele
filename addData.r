@@ -38,6 +38,104 @@ somme@fonction = function(data, posAdd){
 somme@decal = 2
 ########
 
+
+
+
+
+######################
+### nbGagne
+######################
+### nbGagne$function : function qui ajoute le nombre de bille gagnees pour chaque case
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
+###   @return data complété
+### somme$decal : décalage apporté par l'ajout des données par la fonction
+nbGagne = new("dataSupp")
+nbGagne@fonction = function(data, posAdd){
+  # pour chaque ligne
+  #print(data)
+  for(i in 1:nrow(data)){
+   # print(c("i", i))
+    # pour chaque colonne
+    for(j in 1:12){      
+    #  print(c("j", j))
+      distri = data[i,1:12] # je prends le plateau de jeu courant
+     # print("Plateau de jeu : ")
+    #  print(distri)
+      pos = j
+      curPos = pos
+      nbBilles = distri[1,pos]
+     # print(nbBilles)
+      nbGagnes = 0
+      caseArrivee = 0      
+      
+      # la case courante est maintenant vide
+      distri[,pos]=0
+      
+      # distribution
+      while(nbBilles > 0){
+        if(curPos != pos){
+          # update la case d'arrivee
+          caseArrivee = curPos
+          # je distribue la bille
+          distri[,curPos] = distri[,curPos]+1
+          
+          # je décrément mon nombre de billes
+          nbBilles = nbBilles-1
+        }
+        
+        #update position
+        curPos = (curPos+1)%%13
+        if(curPos<1){
+          curPos=1
+        }
+      }
+                  
+      #je calcule le nombre de billes que je gagne
+      #calcule case de fin 
+      caseFin = 1
+      if(pos>=1 && pos<=6){
+        caseFin=7
+      }
+      
+      # si je finis chez l'adversaire
+      if(caseArrivee>caseFin){
+        
+        #calcul du nombre de billes gagnes
+        for(z in caseArrivee:caseFin){
+          if(distri[,z]==2 || distri[,z]==3){
+            nbGagnes = nbGagnes+distri[,z]
+          }
+          else{
+            break
+          }
+        }
+      }
+     # print(c("nbGagne",nbGagnes))
+    #  print("before")
+    #  print(data)
+      data[i,posAdd+j-1] = nbGagnes
+    #  print("after")
+    #  print(data)
+      
+    }# fin colonne
+    
+  }# fin ligne
+  
+  for(n in posAdd:(posAdd+11)){
+    colnames(data)[n] = paste ("nbGagne", n, sep = "")
+  }
+  return (data)
+}
+# decalage
+nbGagne@decal = 12
+########
+
+
+
+
+
 ######################
 ### Nombre de vides avant la première pleine
 ######################

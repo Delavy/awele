@@ -7,14 +7,7 @@ source("addData.r")
 
 ######### Preparation des objets d'enrichissement de données
 ### Initialisation de la liste contenant les objets d'enrichisement
-listOfFx = list()
-listOfFx[[1]] = sum1ou2
-#pedro.fx[[2]] = somme
-#pedro.fx[[3]] = vide
-#pedro.fx[[4]] = nbVidesAvantPleine
-#pedro.fx[[5]] = posMax
-
-
+listOfFx = list(nbGagne)
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
