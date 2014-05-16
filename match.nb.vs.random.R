@@ -16,7 +16,7 @@ source ("bot.afd.R")      #afd1
 source ("bot.rl.R")       #RL
 source ("bot.knn.R")      # knn1
 source ("bot.ludo.R")     #mlpludo
-source ("bot.cart.R")   # not working
+source ("bot.cart.R")   # cart1 working
 
 ##### Attention, prennent du temps à charger
 #source ("bot.svm2.R")   # svm2
