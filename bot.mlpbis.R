@@ -49,9 +49,9 @@ mlpbis.exec = function (awele, model)
   prediction = factor(predict (model, as.data.frame(g), type = "class"))
   
   ret = data.frame(matrix(data=0, ncol=6, nrow=1))
-  colnames(ret) = levels(prediction)
+  colnames(ret) = c (paste ("C", 1:6, sep = ""))
   
-  #resultat = ret[c(prediction[1])] = 1
+  resultat = ret[c(prediction[1])] = 1
   
   return (ret)
   
