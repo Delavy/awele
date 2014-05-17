@@ -1,6 +1,9 @@
 # Chargement de la bibliothèque
 library (e1071)
 
+######################
+### Définition de la classe
+######################
 setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 
 #######################
@@ -8,7 +11,8 @@ setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 ## - bidoua : fonction depuis un livre, qui calcule un potentiel pour chaque case
 ## - nbVidesAvantPleines : nombre de cases vides avant la première pleine
 ## - matrice1ou2 : matrice comprenant true/false si 1 ou 2
-## - nbGange : matrice du nombre de billes gagnées
+## - nbGagne : matrice du nombre de billes gagnées
+## - nulle : n'ajoute aucune donnée
 ## - posMax : position de la case qui contient le plus de billes
 ## - somme : somme des billes
 ## - sum1ou2 : sommes des billes à 1ou2
@@ -56,21 +60,16 @@ somme@decal = 2
 nbGagne = new("dataSupp")
 nbGagne@fonction = function(data, posAdd){
   # pour chaque ligne
-  #print(data)
   for(i in 1:nrow(data)){
-   # print(c("i", i))
     # pour chaque colonne
     for(j in 1:12){      
-    #  print(c("j", j))
-      distri = data[i,1:12] # je prends le plateau de jeu courant
-     # print("Plateau de jeu : ")
-    #  print(distri)
+      # je prends le plateau de jeu courant
+      distri = data[i,1:12] 
+
       pos = j
       curPos = pos
       nbBilles = distri[1,pos]
-     # print(nbBilles)
-      nbGagnes = 0
-      caseArrivee = 0      
+      nbGagnes = caseArrivee = 0
       
       # la case courante est maintenant vide
       distri[,pos]=0
@@ -114,12 +113,9 @@ nbGagne@fonction = function(data, posAdd){
           }
         }
       }
-     # print(c("nbGagne",nbGagnes))
-    #  print("before")
-    #  print(data)
+
       data[i,posAdd+j-1] = nbGagnes
-    #  print("after")
-    #  print(data)
+
       
     }# fin colonne
     
@@ -133,10 +129,6 @@ nbGagne@fonction = function(data, posAdd){
 # decalage
 nbGagne@decal = 12
 ########
-
-
-
-
 
 ######################
 ### Nombre de vides avant la première pleine
@@ -208,12 +200,12 @@ posMax@decal = 2
 ######################
 ### Matrice un ou deux
 ######################
-### posMax$function : function qui ajoute pour chaque donnée si elle a des billes ) 1 ou 2
+### matrice1ou2$function : function qui ajoute pour chaque donnée si elle a 1 ou 2 billes
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
 ###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
-### posMAx$decal : décalage apporté par l'ajout des données par la fonction
+### matrice1ou2$decal : décalage apporté par l'ajout des données par la fonction
 matrice1ou2  =  new("dataSupp")
 matrice1ou2@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
@@ -235,7 +227,7 @@ matrice1ou2@decal = 12
 ######################
 ### Pos Max
 ######################
-### posMax$function : function qui ajoute la position de la maximum
+### posMax$function : function qui ajoute la position de la case avec le maximum de billes
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
 ###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
@@ -322,12 +314,12 @@ sum1ou2@decal = 2
 ######################
 ### 1tour
 ######################
-### vide$function : function qui ajoute le nombre de cases qui peuvent faire 1 tour ou plus.
+### 1tour$function : function qui ajoute le nombre de cases qui peuvent faire 1 tour ou plus.
 ###   @param data les données. 
 ###   ---- Les 6 première lignes doivent contenir les données 
 ###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
 ###   @return data complété
-### vide$decal : décalage apporté par l'ajout des données par la fonction
+### 1tour$decal : décalage apporté par l'ajout des données par la fonction
 unTour  =  new("dataSupp")
 unTour@fonction = function(data, posAdd){
   #ajout des colonnes avec les sommes
@@ -359,6 +351,24 @@ unTour@fonction = function(data, posAdd){
 unTour@decal = 2
 
 
+######################
+### nulle
+######################
+### nulle$function : function qui n'ajoute aucune donnée
+###   @param data les données. 
+###   ---- Les 6 première lignes doivent contenir les données 
+###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
+###   @return data complété
+### nulle$decal : décalage apporté par l'ajout des données par la fonction
+nulle  =  new("dataSupp")
+nulle@fonction = function(data, posAdd){
+  return (data)
+}
+# decalage
+nulle@decal = 0
+######################
+
+
 ########
 ### Fonction qui retourne la somme des décalage apportés par les fonctions dans listOfFx
 ### @param : listOfFx : liste des fonctions classes dataSupp
@@ -370,23 +380,6 @@ addData.getDecalage = function(listOfFx){
   }
   return(decal)
 }
-
-######################
-### 1ou2
-######################
-### 1ou2$function : function qui ajoute la somme des case à 1 ou 2 au data à partir de la position posAdd
-###   @param data les données. 
-###   ---- Les 6 première lignes doivent contenir les données 
-###   ---- posAdd:posAdd+decal doivent être vides car vont etre écrasées
-###   @return data complété
-### 1out2$decal : décalage apporté par l'ajout des données par la fonction
-nulle  =  new("dataSupp")
-nulle@fonction = function(data, posAdd){
-  return (data)
-}
-# decalage
-nulle@decal = 0
-######################
 
 ########
 ### Function qui rajoute les données au tableau existant

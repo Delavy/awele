@@ -1,3 +1,7 @@
+####################################
+#   adlkiller (LDA)
+###################################
+
 # Chargement des bibliothèques
 library (e1071)
 library (fdm2id)
@@ -6,37 +10,40 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
+# Création de la liste des objets dataSupp
 listOfKiller = list(vide, somme, posMax, nbGagne)
 
-########################################
-# TODO : tester quelles fonctions marchent
-########################################
 
-
-# On sélectionne toutes les observations correspondant aux coups joués par le gagnant de la partie
-# On construit un modèle d'ADL à partir des 12 premières variables de ces observations
-# On essaye de prédire la 13e variable (coup joué)
-
-# Fonction de construction du modèles
+######################
+### Création du modèle
+######################
 adlkiller.create.model = function (dataset)
 {
+  # Ajout des données
   dataset = addData.completeData(dataset, listOfKiller)
+  # Calcul du décalage
   decal = addData.getDecalage(listOfKiller)  
   
   # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
   selection = dataset [dataset [, 14+decal] == "G", ]
+    
   # Et on construit un modèle de classification avec l'algorithme ADL
   model = LDA(selection [, 1:(12+decal)], selection [, 13+decal])
   return (model)
 }
-# Construction du mod?le
+# Construction du modèle
 adlkiller.model = adlkiller.create.model (awele.data)
-# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
+
+
+#####################
+### Execution
+#####################
 adlkiller.exec = function (awele, model)
 {
   # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
   
+  # ajout des données
   g = addData.completeData(g, listOfKiller)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
@@ -54,5 +61,6 @@ adlkiller.exec = function (awele, model)
   
   return (ret)
 }
+
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 adlkiller = function (awele) return (adlkiller.exec (awele, adlkiller.model))
