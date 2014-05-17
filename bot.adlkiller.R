@@ -6,7 +6,7 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-listOfKiller = list(sum1ou2, somme, posMax, nbGagne)
+listOfKiller = list(vide, somme, posMax, nbGagne)
 
 ########################################
 # TODO : tester quelles fonctions marchent
