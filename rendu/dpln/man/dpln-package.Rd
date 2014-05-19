@@ -17,6 +17,7 @@ Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2014-05-19\cr
 License: \tab What license is it under?\cr
+Depends: \tab methods\cr
 }
 ~~ An overview of how to use the package, including the most important functions ~~
 }
