@@ -41,4 +41,5 @@ knn1.exec = function (awele, model)
   ret[c(prediction[1])] = 1
   return (ret)
 }
+
 knn1 = function (awele) return (knn1.exec (awele, knn1.model))

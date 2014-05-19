@@ -1,5 +1,5 @@
 ####################################
-#   dpln.adlsupp ( ADL)
+#   dpln.adlsupp ( ADL + dataSupp)
 # 	bots :  
 #     * dpln.adl12
 #     * dpln.adlsum
@@ -13,7 +13,7 @@
 # Chargement des bibliothèques
 library (e1071)
 library (fdm2id)
-source("dpln.addData.R")
+source('dpln.addData.R')
 
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
