@@ -58,3 +58,4 @@ awele.match (dpln.adlkiller, dpln.adl12)
 
 
 
+package.skeleton(name="dpln", path=".", code_files=c("rendu/dpln.bot.adl.R","rendu/dpln.bot.adlsupp.R","rendu/dpln.bot.afd.R","rendu/dpln.bot.cart.R","rendu/dpln.bot.cartsupp.R","rendu/dpln.bot.knn.R","rendu/dpln.bot.mlp.R","rendu/dpln.bot.mlpsupp.R","rendu/dpln.bot.multibot.R","rendu/dpln.bot.nbsupp.R","rendu/dpln.bot.rl.R","rendu/dpln.bot.svm.R","rendu/dpln.bot.svmsupp.R","rendu/dpln.addData.R"))

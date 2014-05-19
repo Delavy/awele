@@ -1,0 +1,10 @@
+Package: dpln
+Type: Package
+Title: Package du bot d'awele de Delaby Pierre et Nivoix Ludovic
+Version: 1.0
+Date: 2014-05-17
+Author: Delaby Pierre et Nivoix Ludovic
+Maintainer: delaby.pierre@gmail.com et ludovic.nivoix@live.fr
+Description: Bot qui joue à l'awele ainsi que fichier de fonctions permettant d'y ajouter des données
+License: copyright 2014
+Depends: methods
