@@ -71,5 +71,44 @@ resultat = evalListInADL(data, list(vide,bidoua), "bidou-vide", resultat)
 resultat = evalListInADL(data, list(vide,matrice1ou2), "matr12-vide", resultat)
 resultat = evalListInADL(data, list(vide, somme, posMax, nbGagne), "killer", resultat)
 
+##### Evaluation à l'aide de 
+# cost.Curves
+
+
+# Chargement du jeu d'Aw?l? en R
+source ("awele.R")
+
+source ("bot.nb.R")       #nb + nb2
+source ("bot.random.R")   #random
+
+source ("bot.pedro.R")    #pedro
+source ("bot.pedrobis.R") #pedrobis
+
+source ("bot.adl.R")      #botADL1
+source ("bot.adl12.R")     #adl12
+source ("bot.adlsum.R")     #adlsum
+source ("bot.adlkiller.R")  #adlkiller
+
+source ("bot.afd.R")      #afd1
+source ("bot.rl.R")       #RL
+source ("bot.knn.R")      # knn1
+
+source ("bot.ludo.R")     #mlpludo
+source ("bot.mlpbis.R")   #mlpbis
+
+source ("bot.cart.R")     # cart1 
+source ("bot.cartbis.R")  # cartBis
+
+
+##### Attention, prennent du temps à charger
+source ("bot.svm2.R")   # svm2
+source ("bot.svm.R")    # svm
+
+plot (data [, 1:12], col = data [, 13], asp = 1)
+data [, 1:12] = PCA (data [, 1:12])$ind$coord
+
+#debut des tests
+bootstrap.curves(method=naiveBayes,x=data[,1:12],y=data[,13], curve="ROCR",new=T,seed=0,lty=1)
+
 
 
