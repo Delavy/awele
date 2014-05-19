@@ -2,7 +2,7 @@
 \alias{dpln.adl12}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+titre
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
