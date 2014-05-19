@@ -1,6 +1,10 @@
 ####################################
-#   adlkiller (LDA)
+#   dpln.adlsupp ( ADL)
 ###################################
+
+####################
+### Initialisation
+####################
 
 # Chargement des bibliothèques
 library (e1071)
@@ -10,41 +14,35 @@ source("addData.r")
 # Chargement des données
 awele.data = read.table ("awele.data", sep = ",", header = T)
 
-# Création de la liste des objets dataSupp
-listOfKiller = list(vide, somme, posMax, nbGagne)
 
-
-######################
+#####################
 ### Création du modèle
-######################
-adlkiller.create.model = function (dataset)
+#####################
+# Fonction de construction du modèles
+dpln.adlsupp.create.model = function (dataset, listOfFx)
 {
-  # Ajout des données
-  dataset = addData.completeData(dataset, listOfKiller)
-  # Calcul du décalage
-  decal = addData.getDecalage(listOfKiller)  
+  dataset = addData.completeData(dataset, listOfFx)
+  decal = addData.getDecalage(listOfFx)  
   
   # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
   selection = dataset [dataset [, 14+decal] == "G", ]
-    
   # Et on construit un modèle de classification avec l'algorithme ADL
   model = LDA(selection [, 1:(12+decal)], selection [, 13+decal])
   return (model)
 }
-# Construction du modèle
-adlkiller.model = adlkiller.create.model (awele.data)
-
 
 #####################
 ### Execution
 #####################
-adlkiller.exec = function (awele, model)
+
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
+dpln.adlsupp.exec = function (awele, model, listOfFx)
 {
   # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
   
-  # ajout des données
-  g = addData.completeData(g, listOfKiller)
+  # on ajoute les données
+  g = addData.completeData(g, listOfFx)
   
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g)[1:12] = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
@@ -62,5 +60,22 @@ adlkiller.exec = function (awele, model)
   return (ret)
 }
 
+#####################
+### Différents bots 
+#####################
+
+
+# Liste de fonctions
+adl12.fx      = list(sum1ou2)
+adlsum.fx     = list(somme)
+adlkiller.fx  = list(vide, somme, posMax, nbGagne)
+
+# Construction du modèle
+dpln.adl12.model      = dpln.adlsupp.create.model (awele.data, adl12.fx)
+dpln.adlsum.model     = dpln.adlsupp.create.model (awele.data, adlsum.fx)
+dpln.adlkiller.model  = dpln.adlsupp.create.model (awele.data, adlkiller.fx)
+
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
-adlkiller = function (awele) return (adlkiller.exec (awele, adlkiller.model))
+dpln.adl12      = function (awele) return (dpln.adlsupp.exec (awele, dpln.adl12.model, adl12.fx))
+dpln.adlsum     = function (awele) return (dpln.adlsupp.exec (awele, dpln.adlsum.model, adlsum.fx))
+dpln.adlkiller  = function (awele) return (dpln.adlsupp.exec (awele, dpln.adlkiller.model, adlkiller.fx))
