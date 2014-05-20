@@ -1,5 +1,6 @@
 ####################################
 #   dpln.cart ( CART)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 # Chargement de la bibliothèque
@@ -32,7 +33,6 @@ dpln.cart.exec = function (awele, model)
   g = graines.matrix(awele)
   
   colnames(g) = c(paste("J",1:6,sep=""),paste("A",1:6,sep=""))
-  #type = prob, conseillé par le prof
   prediction = predict(model, data.frame(g),type="class")
   monretour = data.frame(matrix(data=0, ncol = 6, nrow = 1))
   colnames(monretour) = levels(prediction)

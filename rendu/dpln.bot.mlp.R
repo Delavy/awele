@@ -1,5 +1,6 @@
 ####################################
-#   dpln.mlp ( NNET)
+#   dpln.mlp (NNET)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -40,8 +41,6 @@ dpln.mlp.exec = function (awele, model)
 
   ret = data.frame(matrix(data=0, ncol=6, nrow=1))
   colnames(ret) = levels(prediction)
-  
-  #resultat = ret[c(prediction[1])] = 1
   
   return (ret)
 

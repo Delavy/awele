@@ -1,5 +1,6 @@
 ####################################
 #   MultiBot
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 
@@ -36,6 +37,7 @@ dpln.multibot = function (awele) {
 # Si toujours égalité, celui du premier
 # @param b1 ... b5 : coups proposé par les bots
 # @return le coup le plus demandé
+
 getCoupFromCoups = function(b1, b2, b3, b4, b5){
 
   somme = coup = matrix(0, ncol=6, nrow=1)
@@ -52,17 +54,17 @@ getCoupFromCoups = function(b1, b2, b3, b4, b5){
     b5null = sum(b5 == 0) == 6
     b4null = sum(b4 == 0) == 6
     
-    # soit j'ai déjà plus que 3 bots, dans ce cas là je retourne b1
+    # soit j'ai déjà plus que 3 bots, dans ce cas là je retourne b1 par défaut
     if(b5null || b4null){
       coup = b1;
     }
-    # soit j'ai encore 5 bots 
+    # soit j'ai encore 5 bots et je refais un tour
     else{
       vecNull = matrix(0, ncol=6, nrow=1)
       coup = getCoupFromCoups(b1,b2,b3,vecNull,vecNull)
     }    
   }
-  ## sinon je retourne direct
+  ## sinon je retourne le tableau de valeur
   else{
     coup[somme == valMax] = 1
     coup[somme != valMax] = 0    

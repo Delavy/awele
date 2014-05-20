@@ -1,5 +1,6 @@
 ####################################
 #   dpln.svm ( SVM)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -43,5 +44,5 @@ dpln.svm.exec = function (awele, model)
   ret[c(prediction[1])] = 1
   return (ret)
 }
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 dpln.svm = function (awele) return (dpln.svm.exec (awele, dpln.svm.model))

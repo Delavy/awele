@@ -1,5 +1,6 @@
 ####################################
 #   dpln.svmsupp ( svm + données )
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -62,5 +63,5 @@ dpln.svmsupp.exec = function (awele, model)
   ret[c(prediction[1])] = 1
   return (ret)
 }
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale nb.model)
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale nb.model)
 dpln.svmsupp = function (awele) return (dpln.svmsupp.exec (awele, dpln.svmsupp.model))

@@ -1,5 +1,6 @@
 ####################################
-#   dpln.knn ( KNN)
+#   dpln.knn (KNN)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -42,7 +43,7 @@ dpln.knn.exec = function (awele, model)
   ret = data.frame(matrix(data=0, ncol=6, nrow=1))
   colnames(ret) = levels(prediction)
   
-  # on set la colonne retournée par prédict ) 1.
+  # on set la colonne retournée par prédict à 1.
   ret[c(prediction[1])] = 1
   return (ret)
 }

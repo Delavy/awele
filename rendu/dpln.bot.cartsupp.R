@@ -1,5 +1,6 @@
 ####################################
-#   cartsupp (CART + dataSupp)  
+#   cartsupp (CART + dataSupp)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 

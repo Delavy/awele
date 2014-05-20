@@ -1,5 +1,6 @@
 ####################################
 #   dpln.rl( LR)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -15,9 +16,9 @@ awele.data = read.table ("awele.data", sep = ",", header = T)
 #####################
 dpln.rl.create.model = function (dataset)
 {
-  # On s?lectionne les instances qui correspondent aux coups jou?s par le vainqueur des affrontements
+  # On sélectionne les instances qui correspondent aux coups joués par le vainqueur des affrontements
   selection = awele.data [dataset [, 14] == "G", ]
-  # Et on construit un mod?le de classification avec l'algorithme Naive bayes
+  # Et on construit un modèle de classification avec l'algorithme Régression Logistique
   model = LR(selection [, 1:12], selection [, 13])
   return (model)
 }
@@ -27,14 +28,14 @@ dpln.rl.model = dpln.rl.create.model (awele.data)
 #####################
 ### Execution
 #####################
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu et du mod?le
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
 dpln.rl.exec = function (awele, model)
 {
-  # On r?cup?re l'?tat du plateau de jeu (sous la forme d'une matrice plut?t que d'un vecteur)
+  # On récupère l'état du plateau de jeu (sous la forme d'une matrice plutôt que d'un vecteur)
   g = graines.matrix (awele)
   # On modifie les noms des colonnes pour correspondre aux noms dans l'ensemble d'apprentissage
   colnames (g) = c (paste ("J", 1:6, sep = ""), paste ("A", 1:6, sep = ""))
-  # On applique le mod?le et on retourne les pr?dictions (sous la forme de degr?s d'appartenance aux classes)
+  # On applique le modèle et on retourne les prédictions (sous la forme de degrés d'appartenance aux classes)
   prediction = predict (model, data.frame(g),type = "raw")
   
   # On crée une nouvelle dataframe pour le résultat, tout à 0, et on y colle les noms des colonnes
@@ -46,5 +47,5 @@ dpln.rl.exec = function (awele, model)
   
   return (ret)
 }
-# Fonction d'?valuation de la meilleure solution selon l'?tat du plateau de jeu (en utilisant la variable globale RL.model)
+# Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu (en utilisant la variable globale RL.model)
 dpln.rl = function (awele) return (dpln.rl.exec (awele, dpln.rl.model))

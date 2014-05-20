@@ -1,5 +1,6 @@
 ####################################
 #   dpln.adlsupp ( ADL + dataSupp)
+#   Delaby Pierre & Nivoix Ludovic
 # 	bots :  
 #     * dpln.adl12
 #     * dpln.adlsum

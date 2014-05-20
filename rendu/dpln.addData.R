@@ -2,7 +2,8 @@
 library (e1071)
 
 ######################
-### Définition de la classe
+#   Définition de la classe
+#   Delaby Pierre & Nivoix Ludovic
 ######################
 setClass("dataSupp", representation(fonction = "function", decal = "numeric"))
 

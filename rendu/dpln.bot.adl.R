@@ -1,5 +1,6 @@
 ####################################
 #   dpln.adl (LDA)
+#   Delaby Pierre & Nivoix Ludovic
 ###################################
 
 ####################
@@ -24,7 +25,7 @@ dpln.adl.create.model = function (dataset)
   model = LDA(selection [, 1:12], selection [, 13])
   return (model)
 }
-# Construction du mod?le
+# Construction du modèle
 dpln.adl.model = dpln.adl.create.model (awele.data)
 # Fonction d'évaluation de la meilleure solution selon l'état du plateau de jeu et du modèle
 dpln.adl.exec = function (awele, model)
