@@ -20,7 +20,7 @@ source ("dpln.bot.nbsupp.R")
 source ("dpln.bot.rl.R")
 source ("dpln.bot.svm.R")
 source ("dpln.bot.svmsupp.R")
-
+source ("dpln.bot.NIVOIXDELABY.R")
 
 # MATCH
 awele.match (dpln.adlkiller, nb)
@@ -38,3 +38,4 @@ awele.match (dpln.adlkiller,dpln.mlp)
 awele.match (dpln.adlkiller,dpln.mlpsupp)
 awele.match (dpln.adlkiller,dpln.svm)
 awele.match (dpln.adlkiller,dpln.svmsupp)
+
