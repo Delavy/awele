@@ -7,4 +7,4 @@
 source("dpln.bot.adlsupp.R")
 
 # Choix du bot
-dpln.botawele = dpln.adlkiller
+dpln.nivoixdelaby = dpln.adlkiller
